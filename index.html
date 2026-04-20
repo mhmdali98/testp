@@ -6,15 +6,50 @@
   <title>Mohammed Ali - Frontend Developer</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    @keyframes gradientShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes cardEntrance {
+      from { opacity: 0; transform: translateY(40px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes fadeSlideDown {
+      from { opacity: 0; transform: translateY(-15px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes badgePop {
+      from { opacity: 0; transform: scale(0.7); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-8px); }
+    }
+
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #1B3A5C, #2196F3);
+      background: linear-gradient(135deg, #1B3A5C, #2196F3, #0d47a1, #1B3A5C);
+      background-size: 300% 300%;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
+      animation: gradientShift 8s ease infinite;
     }
+
     .card {
       background: rgba(255,255,255,0.1);
       backdrop-filter: blur(10px);
@@ -23,9 +58,27 @@
       text-align: center;
       border: 1px solid rgba(255,255,255,0.2);
       box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: cardEntrance 0.8s cubic-bezier(0.22, 1, 0.36, 1) both,
+                 float 6s ease-in-out 1s infinite;
     }
-    h1 { font-size: 2.5rem; margin-bottom: 10px; }
-    p { font-size: 1.2rem; opacity: 0.85; margin-bottom: 30px; }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      animation: fadeSlideDown 0.7s ease 0.4s both;
+    }
+
+    p {
+      font-size: 1.2rem;
+      opacity: 0.85;
+      margin-bottom: 30px;
+      animation: fadeIn 0.7s ease 0.7s both;
+    }
+
+    .badges {
+      animation: fadeIn 0.5s ease 0.9s both;
+    }
+
     .badge {
       display: inline-block;
       background: rgba(255,255,255,0.2);
@@ -33,15 +86,38 @@
       padding: 8px 20px;
       margin: 5px;
       font-size: 0.9rem;
+      border: 1px solid transparent;
+      transition: transform 0.25s ease, background 0.25s ease,
+                  box-shadow 0.25s ease, border-color 0.25s ease;
+      animation: badgePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
     }
-    .footer { margin-top: 40px; font-size: 0.85rem; opacity: 0.6; }
+
+    .badge:nth-child(1) { animation-delay: 1.0s; }
+    .badge:nth-child(2) { animation-delay: 1.15s; }
+    .badge:nth-child(3) { animation-delay: 1.3s; }
+    .badge:nth-child(4) { animation-delay: 1.45s; }
+    .badge:nth-child(5) { animation-delay: 1.6s; }
+
+    .badge:hover {
+      transform: translateY(-4px) scale(1.08);
+      background: rgba(255,255,255,0.35);
+      border-color: rgba(255,255,255,0.5);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-size: 0.85rem;
+      opacity: 0.6;
+      animation: fadeIn 0.7s ease 1.8s both;
+    }
   </style>
 </head>
 <body>
   <div class="card">
     <h1>Mohammed Ali Salim</h1>
     <p>Frontend Developer | Vue.js · Nuxt.js · TypeScript</p>
-    <div>
+    <div class="badges">
       <span class="badge">Vue.js</span>
       <span class="badge">Nuxt.js</span>
       <span class="badge">TypeScript</span>
