@@ -2276,6 +2276,7 @@
         newsBy: 'by',
         newsAgo: ' ago',
         newsLoadFail: 'Could not load the feed right now.',
+        newsNoResults: 'No fresh stories found for this filter.',
         newsRetry: 'Try again',
         newsRead: 'Read',
 
@@ -2396,6 +2397,7 @@
         newsBy: 'بواسطة',
         newsAgo: ' مضت',
         newsLoadFail: 'تعذّر جلب الموجز الآن.',
+        newsNoResults: 'لا توجد أخبار جديدة لهذا التصنيف الآن.',
         newsRetry: 'حاول مجدداً',
         newsRead: 'قراءة',
 
@@ -2640,10 +2642,22 @@
     /* ══════════════════════════════════════════════════════════════
        NEWS / TECH PULSE
     ══════════════════════════════════════════════════════════════ */
+    // Algolia OR-syntax requires advancedSyntax=1; simple keyword queries
+    // rank by relevance and produce more useful results.
     const NEWS_FEEDS = {
-      tech: 'https://hn.algolia.com/api/v1/search?tags=front_page&hitsPerPage=9',
-      ai: 'https://hn.algolia.com/api/v1/search_by_date?query=%22AI%22%20OR%20%22LLM%22%20OR%20%22GPT%22%20OR%20%22Anthropic%22%20OR%20%22OpenAI%22%20OR%20%22machine%20learning%22&tags=story&hitsPerPage=9',
-      research: 'https://hn.algolia.com/api/v1/search_by_date?query=%22arxiv%22%20OR%20%22paper%22%20OR%20%22research%22%20OR%20%22study%22&tags=story&hitsPerPage=9'
+      tech: [
+        'https://hn.algolia.com/api/v1/search?tags=front_page&hitsPerPage=12',
+      ],
+      ai: [
+        'https://hn.algolia.com/api/v1/search?query=AI&tags=story&hitsPerPage=12&numericFilters=points%3E20',
+        'https://hn.algolia.com/api/v1/search?query=LLM&tags=story&hitsPerPage=12',
+        'https://hn.algolia.com/api/v1/search?query=AI&tags=story&hitsPerPage=12'
+      ],
+      research: [
+        'https://hn.algolia.com/api/v1/search?query=arxiv&tags=story&hitsPerPage=12',
+        'https://hn.algolia.com/api/v1/search?query=research%20paper&tags=story&hitsPerPage=12',
+        'https://hn.algolia.com/api/v1/search?query=study&tags=story&hitsPerPage=12'
+      ]
     };
     const NEWS_TTL_MS = 10 * 60 * 1000;
     let currentFeed = 'tech';
@@ -2687,15 +2701,16 @@
       `).join('');
     }
 
-    function renderEmpty(retry) {
+    function renderEmpty(retry, kind) {
       const dict = I18N[lang];
+      const msg = kind === 'noresults' ? dict.newsNoResults : dict.newsLoadFail;
       const grid = document.getElementById('newsGrid');
       grid.innerHTML = `
         <div class="news-empty">
           <div class="ne-icon">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           </div>
-          <div>${dict.newsLoadFail}</div>
+          <div>${msg}</div>
           <button id="newsRetry">${dict.newsRetry}</button>
         </div>
       `;
@@ -2705,7 +2720,7 @@
     function renderHits(hits) {
       const dict = I18N[lang];
       const grid = document.getElementById('newsGrid');
-      if (!hits || !hits.length) { renderEmpty(() => loadFeed(currentFeed, true)); return; }
+      if (!hits || !hits.length) { renderEmpty(() => loadFeed(currentFeed, true), 'noresults'); return; }
       grid.innerHTML = hits.map(h => {
         const url = newsUrl(h);
         const host = hostFromUrl(url);
@@ -2755,19 +2770,33 @@
       const refreshBtn = document.getElementById('newsRefresh');
       refreshBtn.classList.add('spinning');
 
+      const urls = NEWS_FEEDS[name];
+      let hits = [];
+      let lastErr = null;
       try {
-        const ctrl = new AbortController();
-        const timeout = setTimeout(() => ctrl.abort(), 8000);
-        const r = await fetch(NEWS_FEEDS[name], { signal: ctrl.signal });
-        clearTimeout(timeout);
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        const json = await r.json();
-        const hits = (json.hits || []).filter(h => h.title || h.story_title);
-        lastRendered[name] = hits;
-        sessionStorage.setItem(cacheKey, JSON.stringify({ at: Date.now(), hits }));
-        if (currentFeed === name) renderHits(hits);
-      } catch (e) {
-        if (currentFeed === name) renderEmpty(() => loadFeed(name, true));
+        for (const url of urls) {
+          try {
+            const ctrl = new AbortController();
+            const timeout = setTimeout(() => ctrl.abort(), 8000);
+            const r = await fetch(url, { signal: ctrl.signal });
+            clearTimeout(timeout);
+            if (!r.ok) { lastErr = new Error('HTTP ' + r.status); continue; }
+            const json = await r.json();
+            const got = (json.hits || []).filter(h => h.title || h.story_title);
+            if (got.length) { hits = got; break; }
+          } catch (e) { lastErr = e; }
+        }
+
+        if (currentFeed !== name) return;
+        if (hits.length) {
+          lastRendered[name] = hits;
+          sessionStorage.setItem(cacheKey, JSON.stringify({ at: Date.now(), hits }));
+          renderHits(hits);
+        } else if (lastErr) {
+          renderEmpty(() => loadFeed(name, true), 'error');
+        } else {
+          renderEmpty(() => loadFeed(name, true), 'noresults');
+        }
       } finally {
         refreshBtn.classList.remove('spinning');
       }
