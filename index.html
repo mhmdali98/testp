@@ -182,6 +182,30 @@
       box-shadow: 0 4px 16px rgba(2, 136, 209, 0.2);
     }
 
+    .ctrl-btn-cta {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-color: transparent;
+      color: #fff;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 18px rgba(0, 229, 255, 0.28);
+    }
+    .ctrl-btn-cta:hover {
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 6px 22px rgba(0, 229, 255, 0.45);
+    }
+    html.light .ctrl-btn-cta {
+      box-shadow: 0 4px 18px rgba(2, 136, 209, 0.28);
+    }
+    html.light .ctrl-btn-cta:hover {
+      color: #fff;
+      box-shadow: 0 6px 22px rgba(2, 136, 209, 0.4);
+    }
+
     /* ── Floating particles ── */
     #particles {
       position: fixed;
@@ -555,6 +579,7 @@
 
   <!-- Controls -->
   <div class="controls-bar">
+    <a id="downloadCv" class="ctrl-btn ctrl-btn-cta" href="Mohammed-Ali-Salim-CV.pdf" download="Mohammed-Ali-Salim-CV.pdf" title="Download CV"></a>
     <button id="themeToggle" class="ctrl-btn" title="Toggle theme"></button>
     <button id="langToggle" class="ctrl-btn" title="Toggle language"></button>
   </div>
@@ -813,6 +838,7 @@
         secPortfolio: 'Portfolio',
         portNote:  'Most work is for private company systems and cannot be shared publicly. These are available public demos and live projects:',
         portMore:  'More work — Google Drive',
+        downloadCv: '⬇ Download CV',
         footer:    'Thank you for reviewing my CV · Mohammed Ali Salim · Frontend Developer',
       },
       ar: {
@@ -868,6 +894,7 @@
         secPortfolio: 'المشاريع',
         portNote:  'معظم الأعمال لأنظمة شركات خاصة ولا يمكن مشاركتها علنًا. فيما يلي العروض التجريبية العامة والمشاريع الحية:',
         portMore:  'مزيد من الأعمال — Google Drive',
+        downloadCv: '⬇ تحميل السيرة الذاتية',
         footer:    'شكرًا لمراجعة سيرتي الذاتية · محمد علي سالم · مطور واجهات أمامية',
       }
     };
@@ -920,6 +947,7 @@
       });
 
       document.getElementById('langToggle').textContent = l === 'ar' ? 'English' : 'عربي';
+      document.getElementById('downloadCv').textContent = t[l].downloadCv;
       updateThemeBtn();
 
       // Brief animation on body to signal language switch
