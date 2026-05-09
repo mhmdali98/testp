@@ -787,6 +787,167 @@
     /* ══════════════════════════════════════════════════════════════
        PORTFOLIO
     ══════════════════════════════════════════════════════════════ */
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      gap: 22px;
+      margin-bottom: 56px;
+    }
+    .featured-card {
+      position: relative;
+      padding: 28px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 22px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      gap: 14px;
+      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .featured-card::before {
+      content: '';
+      position: absolute; inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: conic-gradient(from var(--ang, 0deg), transparent 0deg 80deg, var(--primary) 130deg, var(--primary-2) 200deg, var(--primary-3) 260deg, transparent 320deg 360deg);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      pointer-events: none;
+    }
+    .featured-card::after {
+      content: '';
+      position: absolute;
+      width: 240px; height: 240px;
+      bottom: -120px; right: -120px;
+      background: radial-gradient(circle, var(--primary), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      filter: blur(40px);
+      pointer-events: none;
+    }
+    .featured-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--glass-border-strong);
+      box-shadow: var(--shadow-md), var(--shadow-glow);
+    }
+    .featured-card:hover::before { opacity: 1; animation: spinAngle 5s linear infinite; }
+    .featured-card:hover::after { opacity: 0.18; }
+    .featured-head {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 10px; flex-wrap: wrap;
+    }
+    .featured-num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      font-size: 1.4rem;
+      background: var(--gradient-1);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent;
+      letter-spacing: 1px;
+    }
+    .featured-period, .featured-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      padding: 4px 10px;
+      background: rgba(0,229,255,0.08);
+      border: 1px solid rgba(0,229,255,0.22);
+      color: var(--primary);
+      border-radius: 999px;
+    }
+    .featured-badge.ai {
+      background: rgba(108,92,231,0.12);
+      border-color: rgba(108,92,231,0.32);
+      color: var(--primary-2);
+    }
+    .featured-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .featured-desc {
+      font-size: 0.92rem;
+      color: var(--text-soft);
+      line-height: 1.7;
+      flex-grow: 1;
+    }
+    .featured-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .featured-tags .tag { font-size: 0.74rem; padding: 4px 9px; }
+    .featured-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.86rem; font-weight: 600;
+      color: var(--primary);
+      align-self: flex-start;
+      padding-top: 4px;
+      transition: gap 0.3s ease, color 0.3s ease;
+    }
+    .featured-link svg { width: 14px; height: 14px; transition: transform 0.3s ease; }
+    .featured-card:hover .featured-link { gap: 14px; }
+    .featured-card:hover .featured-link svg { transform: translateX(4px); }
+    html[dir="rtl"] .featured-card:hover .featured-link svg { transform: translateX(-4px); }
+
+    .private-callout {
+      display: flex; align-items: center; gap: 18px;
+      padding: 22px 26px;
+      margin-bottom: 32px;
+      background: linear-gradient(135deg, rgba(108,92,231,0.10), rgba(0,229,255,0.06));
+      border: 1px solid var(--glass-border-strong);
+      border-radius: 18px;
+      flex-wrap: wrap;
+      position: relative;
+      overflow: hidden;
+    }
+    .private-callout::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 0% 0%, rgba(108,92,231,0.12), transparent 50%);
+      pointer-events: none;
+    }
+    .private-icon {
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      background: var(--gradient-1);
+      display: grid; place-items: center;
+      color: #00131a;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-glow);
+      position: relative; z-index: 1;
+    }
+    html.light .private-icon { color: #fff; }
+    .private-icon svg { width: 22px; height: 22px; }
+    .private-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 4px;
+      position: relative; z-index: 1;
+    }
+    .private-desc {
+      font-size: 0.88rem;
+      color: var(--text-soft);
+      max-width: 560px;
+      line-height: 1.6;
+      position: relative; z-index: 1;
+    }
+    .private-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-inline-start: auto; position: relative; z-index: 1; }
+
+    .more-head {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 22px;
+    }
+    .more-head h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    .more-head .line {
+      flex: 1; height: 1px;
+      background: linear-gradient(to right, var(--glass-border), transparent);
+    }
+
     .port-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -1101,7 +1262,7 @@
               <div class="stat-label" data-i18n="statProjects"></div>
             </div>
             <div class="stat-item">
-              <div class="stat-num" data-count="7">0</div>
+              <div class="stat-num" data-count="8">0</div>
               <div class="stat-label" data-i18n="statCompanies"></div>
             </div>
             <div class="stat-item">
@@ -1389,6 +1550,11 @@
             <div class="tl-company" data-i18n="job7Company"></div>
             <div class="tl-meta" data-i18n="job7Meta"></div>
           </div></div>
+          <div class="tl-item"><div class="tl-dot"></div><div class="tl-card">
+            <div class="tl-head"><div class="tl-title" data-i18n="job8Title"></div><div class="tl-period" data-i18n="job8Period"></div></div>
+            <div class="tl-company" data-i18n="job8Company"></div>
+            <div class="tl-meta" data-i18n="job8Meta"></div>
+          </div></div>
         </div>
       </div>
     </div>
@@ -1444,21 +1610,168 @@
         <h2 class="section-title" data-i18n="portTitle"></h2>
         <p class="section-sub" data-i18n="portSub"></p>
       </div>
+
+      <!-- Private work callout -->
+      <div class="private-callout reveal">
+        <div class="private-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div>
+          <div class="private-title" data-i18n="privateTitle"></div>
+          <div class="private-desc" data-i18n="privateDesc"></div>
+        </div>
+        <div class="private-tags">
+          <span class="featured-badge" data-i18n="privateTagGov"></span>
+          <span class="featured-badge" data-i18n="privateTagCorp"></span>
+          <span class="featured-badge ai">NDA</span>
+        </div>
+      </div>
+
+      <!-- Featured Projects (rich) -->
+      <div class="featured-grid reveal-stagger">
+
+        <article class="featured-card">
+          <div class="featured-head">
+            <span class="featured-num">01</span>
+            <span class="featured-period" data-i18n="proj1Period"></span>
+          </div>
+          <h3 class="featured-title" data-i18n="proj1Title"></h3>
+          <p class="featured-desc" data-i18n="proj1Desc"></p>
+          <div class="featured-tags">
+            <span class="tag">Vue.js</span><span class="tag">Nuxt.js</span><span class="tag">Dashboards</span><span class="tag">Responsive</span>
+          </div>
+          <a class="featured-link" href="https://ht.iq" target="_blank" rel="noopener">
+            <span data-i18n="visitProject"></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </article>
+
+        <article class="featured-card">
+          <div class="featured-head">
+            <span class="featured-num">02</span>
+            <span class="featured-badge ai">AI · RAG</span>
+          </div>
+          <h3 class="featured-title" data-i18n="proj2Title"></h3>
+          <p class="featured-desc" data-i18n="proj2Desc"></p>
+          <div class="featured-tags">
+            <span class="tag hi">RAG</span><span class="tag hi">Fine Tuning</span><span class="tag">Vue.js</span><span class="tag">Nuxt</span><span class="tag">FastAPI</span>
+          </div>
+          <a class="featured-link" href="https://shams-ai.up.railway.app/" target="_blank" rel="noopener">
+            <span data-i18n="visitProject"></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </article>
+
+        <article class="featured-card">
+          <div class="featured-head">
+            <span class="featured-num">03</span>
+            <span class="featured-badge ai">NLP · Voice</span>
+          </div>
+          <h3 class="featured-title" data-i18n="proj3Title"></h3>
+          <p class="featured-desc" data-i18n="proj3Desc"></p>
+          <div class="featured-tags">
+            <span class="tag hi">NLP</span><span class="tag hi">Speech-to-Text</span><span class="tag">FastAPI</span><span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">Nuxt</span>
+          </div>
+          <a class="featured-link" href="https://smart-nlp-frontend-production.up.railway.app/" target="_blank" rel="noopener">
+            <span data-i18n="visitProject"></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </article>
+
+        <article class="featured-card">
+          <div class="featured-head">
+            <span class="featured-num">04</span>
+            <span class="featured-badge ai">RAG · LLM</span>
+          </div>
+          <h3 class="featured-title" data-i18n="proj4Title"></h3>
+          <p class="featured-desc" data-i18n="proj4Desc"></p>
+          <div class="featured-tags">
+            <span class="tag hi">RAG</span><span class="tag hi">AI</span><span class="tag">FastAPI</span><span class="tag">Vue.js</span><span class="tag">Fine Tuning</span>
+          </div>
+          <a class="featured-link" href="https://rag-shams-production.up.railway.app/" target="_blank" rel="noopener">
+            <span data-i18n="visitProject"></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </article>
+
+        <article class="featured-card">
+          <div class="featured-head">
+            <span class="featured-num">05</span>
+            <span class="featured-badge ai">ML · KNN</span>
+          </div>
+          <h3 class="featured-title" data-i18n="proj5Title"></h3>
+          <p class="featured-desc" data-i18n="proj5Desc"></p>
+          <div class="featured-tags">
+            <span class="tag hi">Machine Learning</span><span class="tag hi">KNN</span><span class="tag">FastAPI</span><span class="tag">Python</span><span class="tag">Nuxt</span><span class="tag">Vue.js</span>
+          </div>
+          <a class="featured-link" href="https://meunrecommenderfront-production.up.railway.app/" target="_blank" rel="noopener">
+            <span data-i18n="visitProject"></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </article>
+
+        <article class="featured-card">
+          <div class="featured-head">
+            <span class="featured-num">06</span>
+            <span class="featured-badge ai">Computer Vision</span>
+          </div>
+          <h3 class="featured-title" data-i18n="proj6Title"></h3>
+          <p class="featured-desc" data-i18n="proj6Desc"></p>
+          <div class="featured-tags">
+            <span class="tag hi">Computer Vision</span><span class="tag hi">MediaPipe</span><span class="tag">Vue.js</span><span class="tag">Hand Gestures</span>
+          </div>
+          <a class="featured-link" href="https://hand-move-img-production.up.railway.app/" target="_blank" rel="noopener">
+            <span data-i18n="visitProject"></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </article>
+
+        <article class="featured-card">
+          <div class="featured-head">
+            <span class="featured-num">07</span>
+            <span class="featured-badge">Corporate</span>
+          </div>
+          <h3 class="featured-title" data-i18n="proj7Title"></h3>
+          <p class="featured-desc" data-i18n="proj7Desc"></p>
+          <div class="featured-tags">
+            <span class="tag">Vue.js</span><span class="tag">Nuxt.js</span>
+          </div>
+          <a class="featured-link" href="https://dottech-iq.org/" target="_blank" rel="noopener">
+            <span data-i18n="visitProject"></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </article>
+
+        <article class="featured-card">
+          <div class="featured-head">
+            <span class="featured-num">08</span>
+            <span class="featured-badge">Telecom</span>
+          </div>
+          <h3 class="featured-title" data-i18n="proj8Title"></h3>
+          <p class="featured-desc" data-i18n="proj8Desc"></p>
+          <div class="featured-tags">
+            <span class="tag">Vue.js</span><span class="tag">Responsive</span>
+          </div>
+          <a class="featured-link" href="https://shams-tele.com/ar" target="_blank" rel="noopener">
+            <span data-i18n="visitProject"></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </article>
+
+      </div>
+
+      <!-- More Live Sites -->
+      <div class="reveal">
+        <div class="more-head">
+          <h3 data-i18n="moreLiveSites"></h3>
+          <span class="line"></span>
+        </div>
+      </div>
       <div class="port-grid reveal-stagger">
         <a class="port-card" href="https://www.serahalbelad.com" target="_blank" rel="noopener">
           <div class="port-card-head"><div class="port-fav">S</div><div class="port-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div></div>
           <div class="port-name">Serah Albelad</div>
           <div class="port-host">serahalbelad.com</div>
-        </a>
-        <a class="port-card" href="https://shams-tele.com/ar" target="_blank" rel="noopener">
-          <div class="port-card-head"><div class="port-fav">S</div><div class="port-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div></div>
-          <div class="port-name">Shams Telecom</div>
-          <div class="port-host">shams-tele.com</div>
-        </a>
-        <a class="port-card" href="https://dottech-iq.org/" target="_blank" rel="noopener">
-          <div class="port-card-head"><div class="port-fav">D</div><div class="port-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div></div>
-          <div class="port-name">Dot Tech</div>
-          <div class="port-host">dottech-iq.org</div>
         </a>
         <a class="port-card" href="https://www.fiberiraq.com/" target="_blank" rel="noopener">
           <div class="port-card-head"><div class="port-fav">F</div><div class="port-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div></div>
@@ -1490,15 +1803,10 @@
           <div class="port-name">Menu v2</div>
           <div class="port-host">menuv2.netlify.app</div>
         </a>
-        <a class="port-card" href="https://shams-ai.up.railway.app/" target="_blank" rel="noopener">
-          <div class="port-card-head"><div class="port-fav">AI</div><div class="port-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div></div>
-          <div class="port-name">Shams AI</div>
-          <div class="port-host">shams-ai.railway.app</div>
-        </a>
-        <a class="port-card" href="https://meunrecommenderfront-production.up.railway.app/" target="_blank" rel="noopener">
-          <div class="port-card-head"><div class="port-fav">R</div><div class="port-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div></div>
-          <div class="port-name">Menu Recommender</div>
-          <div class="port-host">meunrecommender.railway.app</div>
+        <a class="port-card" href="https://www.linkedin.com/in/mohammed-ali-almaliky-177568157" target="_blank" rel="noopener">
+          <div class="port-card-head"><div class="port-fav">in</div><div class="port-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div></div>
+          <div class="port-name">LinkedIn Profile</div>
+          <div class="port-host">linkedin.com/in/mohammed-ali-almaliky</div>
         </a>
         <a class="port-card" href="https://drive.google.com/folderview?id=1OPNNfUshOTAK3G8140TqgbXMnjUx9XBh" target="_blank" rel="noopener">
           <div class="port-card-head"><div class="port-fav">+</div><div class="port-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div></div>
@@ -1608,13 +1916,14 @@
         ebExp: 'Career',
         expTitle: 'Work Experience',
         expSub: 'A timeline of teams I joined, products I shipped, and challenges I solved.',
-        job1Title: 'Web Developer',          job1Company: 'Shams Telecom',                  job1Period: 'Sep 2024 — Now',  job1Meta: 'Iraq · Remote',
-        job2Title: 'Frontend Developer',     job2Company: 'Digital Logic Company',          job2Period: 'Jan – Aug 2024',  job2Meta: 'Iraq · Remote',
-        job3Title: 'Full-Stack Developer',   job3Company: 'Starsphere Company',             job3Period: '2023 – 2025',     job3Meta: 'Iraq · Baghdad',
-        job4Title: 'Frontend Developer',     job4Company: 'Echo Tech Company',              job4Period: '2022 – 2023',     job4Meta: 'Iraq · Remote',
-        job5Title: 'Web Developer',          job5Company: 'Mediatriple Company',            job5Period: '2021 – 2022',     job5Meta: 'Turkey · Remote',
-        job6Title: 'Full-Stack Web Developer', job6Company: 'Alkafeel Institute for IT',    job6Period: '2021',            job6Meta: 'Iraq · Karbala',
-        job7Title: 'Software Developer',     job7Company: 'Enjaz QiCard Company',           job7Period: '2019 – 2021',     job7Meta: 'Iraq · Baghdad',
+        job1Title: 'Software Developer',      job1Company: 'Dot Tech · Self-employed',          job1Period: 'Jan 2026 — Now',          job1Meta: 'Iraq · Hybrid',
+        job2Title: 'Senior Web Developer',    job2Company: 'Shams Telecom · Part-time',         job2Period: 'Oct 2024 — Jan 2026 · 1y 4m', job2Meta: 'Iraq · Stack: Nuxt',
+        job3Title: 'Full-Stack Developer',    job3Company: 'Feed App · Full-time',              job3Period: 'Jan 2023 — Mar 2025 · 2y 3m', job3Meta: 'Baghdad, Iraq · On-site',
+        job4Title: 'Frontend Developer',      job4Company: 'Digital Logic · Part-time',         job4Period: 'May — Oct 2024 · 6m',     job4Meta: 'Iraq',
+        job5Title: 'Frontend Developer',      job5Company: 'Echo com · Part-time',              job5Period: 'Oct 2022 — Jan 2023 · 4m', job5Meta: 'Remote',
+        job6Title: 'Web Developer',           job6Company: 'Mediatriple Internet Services · Freelance', job6Period: 'Jun 2021 — Jan 2022 · 8m', job6Meta: 'Istanbul, Türkiye',
+        job7Title: 'Full-Stack Developer',    job7Company: 'Alkafeel Institute · Full-time',    job7Period: 'Jan — Jul 2021 · 7m',     job7Meta: 'Karbala, Iraq',
+        job8Title: 'Web Developer',           job8Company: 'Enjaz LLC',                          job8Period: 'May 2019 — Jun 2021 · 2y 2m', job8Meta: 'Iraq',
 
         ebEdu: 'Education', eduTitle: 'Academic Background',
         edu1Degree: 'M.Sc. Candidate — Computer Engineering (AI)', edu1School: 'Postgraduate Studies', edu1Year: 'In Progress',
@@ -1626,9 +1935,34 @@
         langPersian: 'Persian', langPersianLvl: 'Conversational',
 
         ebPort: 'Selected Work',
-        portTitle: 'Live projects & public demos',
-        portSub: 'Most work is for private company systems and cannot be shared publicly. Below are public demos and live projects.',
+        portTitle: 'Featured projects & live demos',
+        portSub: 'A curated selection of products I designed, built and shipped — including AI, NLP, computer vision, full-stack systems and large-scale dashboards.',
         portMore: 'See more on Drive',
+        moreLiveSites: 'More Live Sites',
+        visitProject: 'Visit project',
+
+        privateTitle: 'Confidential & enterprise work',
+        privateDesc: 'Beyond the public demos, I have shipped many private projects for companies and government entities — internal platforms, financial systems, and ministry-level products that cannot be shared publicly under NDA.',
+        privateTagGov: 'Government',
+        privateTagCorp: 'Enterprise',
+
+        proj1Period: 'Feb 2023 — Jan 2025',
+        proj1Title: 'E-Ration Card System (Government)',
+        proj1Desc: 'A nationwide electronic ration-card platform for Iraq with rich admin dashboards, data tables and responsive interfaces — built end-to-end with Vue and Nuxt.',
+        proj2Title: 'Shams AI — Customer Support v2',
+        proj2Desc: 'AI customer-support assistant powered by RAG and fine-tuning. Answers customer queries naturally using the company\'s own knowledge base, with a conversational Vue/Nuxt frontend and FastAPI backend.',
+        proj3Title: 'Smart Expenses with NLP & Voice',
+        proj3Desc: 'A smart expense-tracking app that understands natural-language input — typed in any order, or spoken — using NLP and speech-to-text, then logs entries with the correct numbers automatically.',
+        proj4Title: 'AI Chatbot — Document RAG',
+        proj4Desc: 'A grounded AI support agent that acts as a company\'s help-desk: it answers strictly from internal documents and knowledge files, never hallucinating outside that scope.',
+        proj5Title: 'Menu Recommender (ML · KNN)',
+        proj5Desc: 'A smart restaurant menu recommender using K-Nearest Neighbors. The menu adapts to the user, learns preferences, and surfaces the best dish recommendations to lift order experience.',
+        proj6Title: 'Touchless Web — Computer Vision',
+        proj6Desc: 'A no-touch web experience controlled entirely with hand gestures via the webcam, using MediaPipe for real-time hand tracking — accessibility-first interaction.',
+        proj7Title: 'Dot Tech — Corporate Website',
+        proj7Desc: 'Marketing website for Dot Tech — a clean, modern presence with smooth animations and a focus on the company\'s services.',
+        proj8Title: 'Shams Telecom — Corporate Website',
+        proj8Desc: 'Bilingual corporate website for Shams Telecom delivering a fast, responsive presence and showcasing their products and services.',
 
         ebContact: 'Get in touch',
         ctaTitle: "Have a project in mind? Let's build it together.",
@@ -1684,13 +2018,14 @@
         ebExp: 'المسيرة المهنية',
         expTitle: 'الخبرة العملية',
         expSub: 'الفرق التي انضممت إليها، والمنتجات التي أطلقتها، والتحديات التي حللتها.',
-        job1Title: 'مطور ويب',           job1Company: 'شمس تيليكوم',                job1Period: 'سبتمبر 2024 — الآن',  job1Meta: 'العراق · عن بُعد',
-        job2Title: 'مطور واجهات أمامية', job2Company: 'شركة ديجيتال لوجيك',           job2Period: 'يناير – أغسطس 2024',  job2Meta: 'العراق · عن بُعد',
-        job3Title: 'مطور Full-Stack',    job3Company: 'شركة ستارسفير',                job3Period: '2023 – 2025',         job3Meta: 'العراق · بغداد',
-        job4Title: 'مطور واجهات أمامية', job4Company: 'شركة إيكو تك',                job4Period: '2022 – 2023',         job4Meta: 'العراق · عن بُعد',
-        job5Title: 'مطور ويب',           job5Company: 'شركة ميدياتريبل',              job5Period: '2021 – 2022',         job5Meta: 'تركيا · عن بُعد',
-        job6Title: 'مطور ويب متكامل',    job6Company: 'معهد الكفيل لتقنية المعلومات', job6Period: '2021',                job6Meta: 'العراق · كربلاء',
-        job7Title: 'مطور برمجيات',       job7Company: 'شركة إنجاز QiCard',           job7Period: '2019 – 2021',         job7Meta: 'العراق · بغداد',
+        job1Title: 'مطور برمجيات',         job1Company: 'دوت تك · عمل حر',                  job1Period: 'يناير 2026 — الآن',          job1Meta: 'العراق · هجين',
+        job2Title: 'كبير مطوري الويب',     job2Company: 'شمس تيليكوم · دوام جزئي',           job2Period: 'أكتوبر 2024 — يناير 2026 · سنة و4 أشهر', job2Meta: 'العراق · Nuxt',
+        job3Title: 'مطور Full-Stack',     job3Company: 'Feed App · دوام كامل',             job3Period: 'يناير 2023 — مارس 2025 · سنتان و3 أشهر', job3Meta: 'بغداد، العراق · حضوري',
+        job4Title: 'مطور واجهات أمامية',  job4Company: 'ديجيتال لوجيك · دوام جزئي',          job4Period: 'مايو — أكتوبر 2024 · 6 أشهر', job4Meta: 'العراق',
+        job5Title: 'مطور واجهات أمامية',  job5Company: 'Echo com · دوام جزئي',              job5Period: 'أكتوبر 2022 — يناير 2023 · 4 أشهر', job5Meta: 'عن بُعد',
+        job6Title: 'مطور ويب',            job6Company: 'Mediatriple Internet · عمل حر',     job6Period: 'يونيو 2021 — يناير 2022 · 8 أشهر', job6Meta: 'إسطنبول، تركيا',
+        job7Title: 'مطور Full-Stack',     job7Company: 'معهد الكفيل · دوام كامل',           job7Period: 'يناير — يوليو 2021 · 7 أشهر', job7Meta: 'كربلاء، العراق',
+        job8Title: 'مطور ويب',            job8Company: 'إنجاز LLC',                         job8Period: 'مايو 2019 — يونيو 2021 · سنتان و شهران', job8Meta: 'العراق',
 
         ebEdu: 'التعليم', eduTitle: 'الخلفية الأكاديمية',
         edu1Degree: 'طالب ماجستير — هندسة الحاسوب (الذكاء الاصطناعي)', edu1School: 'الدراسات العليا', edu1Year: 'قيد الدراسة',
@@ -1702,9 +2037,34 @@
         langPersian: 'الفارسية', langPersianLvl: 'محادثة',
 
         ebPort: 'مختارات من أعمالي',
-        portTitle: 'مشاريع حية وعروض عامة',
-        portSub: 'معظم الأعمال لأنظمة شركات خاصة لا يمكن نشرها. هذه عروض تجريبية ومشاريع حية متاحة للجمهور.',
+        portTitle: 'مشاريع مميّزة وعروض حيّة',
+        portSub: 'مجموعة منتقاة من المنتجات التي صمّمتها وبنيتها وأطلقتها — تشمل الذكاء الاصطناعي ومعالجة اللغة والرؤية الحاسوبية وأنظمة Full-Stack ولوحات تحكم ضخمة.',
         portMore: 'مزيد على Drive',
+        moreLiveSites: 'مواقع حيّة أخرى',
+        visitProject: 'زيارة المشروع',
+
+        privateTitle: 'أعمال سرّية وأنظمة مؤسسية',
+        privateDesc: 'إلى جانب العروض العامة، أطلقت عدداً من المشاريع الخاصة لشركات وجهات حكومية — منصّات داخلية وأنظمة مالية ومنتجات على مستوى الوزارات لا يمكن نشرها علنًا بموجب اتفاقيات سرّية.',
+        privateTagGov: 'حكومي',
+        privateTagCorp: 'مؤسسي',
+
+        proj1Period: 'فبراير 2023 — يناير 2025',
+        proj1Title: 'البطاقة التموينية الإلكترونية (حكومي)',
+        proj1Desc: 'منصّة إلكترونية للبطاقة التموينية على مستوى العراق مع لوحات تحكم متقدّمة، جداول بيانات وواجهات متجاوبة — بنيت كاملةً بـ Vue و Nuxt.',
+        proj2Title: 'شمس AI — مساعد خدمة العملاء v2',
+        proj2Desc: 'مساعد ذكاء اصطناعي لخدمة العملاء مدعوم بـ RAG وضبط دقيق، يجيب على استفسارات العملاء طبيعياً من قاعدة معرفة الشركة، بواجهة محادثة Vue/Nuxt وخلفية FastAPI.',
+        proj3Title: 'مصاريف ذكية بـ NLP والصوت',
+        proj3Desc: 'تطبيق ذكي لتسجيل المصاريف يفهم الإدخال بلغة طبيعية — مكتوبة بأي ترتيب أو منطوقة — باستخدام NLP وتحويل الصوت إلى نص، ويسجّلها بالأرقام الصحيحة تلقائياً.',
+        proj4Title: 'شات بوت ذكي — RAG على المستندات',
+        proj4Desc: 'وكيل دعم ذكي يلعب دور فريق خدمة العملاء: يجيب فقط من ملفات الشركة الداخلية ولا يخترع إجابات خارج نطاقها.',
+        proj5Title: 'نظام توصية المنيو (ML · KNN)',
+        proj5Desc: 'نظام توصية ذكي للمطاعم باستخدام K-Nearest Neighbors. المنيو يتكيّف مع المستخدم، يتعلّم تفضيلاته، ويقترح أفضل الأطباق لتحسين تجربة الطلب.',
+        proj6Title: 'موقع بدون لمس — رؤية حاسوبية',
+        proj6Desc: 'تجربة ويب بدون لمس يُتحكَّم بها بالكامل عبر إيماءات اليد والكاميرا، باستخدام MediaPipe لتتبّع اليد لحظياً — تفاعل يركّز على إمكانية الوصول.',
+        proj7Title: 'دوت تك — الموقع الرسمي',
+        proj7Desc: 'موقع تعريفي لشركة دوت تك بتصميم نظيف وحديث وحركات سلسة، يبرز خدمات الشركة.',
+        proj8Title: 'شمس تيليكوم — الموقع الرسمي',
+        proj8Desc: 'موقع رسمي ثنائي اللغة لشركة شمس تيليكوم، سريع ومتجاوب، يعرض منتجاتهم وخدماتهم.',
 
         ebContact: 'تواصل معي',
         ctaTitle: 'لديك مشروع في بالك؟ لنبنه معًا.',
