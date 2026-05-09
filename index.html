@@ -321,17 +321,14 @@
       width: 88px; height: 88px;
       border-radius: 50%;
       background: linear-gradient(135deg, #1565c0, var(--accent));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.1rem;
-      font-weight: 800;
+      display: block;
+      object-fit: cover;
+      object-position: center top;
       margin-bottom: 22px;
       border: 2px solid rgba(0,229,255,0.45);
       animation: pulseDot 3s ease-in-out infinite;
       position: relative;
       z-index: 1;
-      color: #fff;
     }
     html.light .avatar {
       border-color: rgba(2,136,209,0.45);
@@ -591,7 +588,7 @@
     <!-- HERO -->
     <section class="hero">
       <div class="hero-card">
-        <div class="avatar">M</div>
+        <img class="avatar" src="profile.jpg" alt="Mohammed Ali Salim">
         <h1 class="hero-name">Mohammed Ali Salim</h1>
         <div class="hero-role" data-i18n="heroRole"></div>
         <div class="contacts">
