@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mohammed Ali Salim - Frontend Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    /* ══════════════════════════
+       THEME VARIABLES
+    ══════════════════════════ */
     :root {
       --primary: #2196F3;
       --accent: #00E5FF;
@@ -13,10 +19,69 @@
       --glass-border: rgba(255, 255, 255, 0.11);
       --text: #e8f4fd;
       --text-dim: rgba(232, 244, 253, 0.58);
+      --bg-1: #08111f;
+      --bg-2: #0d1e35;
+      --bg-3: #0e2a4a;
+      --bg-4: #091827;
+      --card-shadow: 0 8px 40px rgba(0,0,0,0.45);
+      --card-shadow-hover: 0 16px 50px rgba(0,0,0,0.55), 0 0 0 1px rgba(0,229,255,0.14);
+      --hero-shadow: 0 24px 64px rgba(0,0,0,0.55);
+      --ctrl-bg: rgba(255,255,255,0.1);
+      --ctrl-border: rgba(255,255,255,0.18);
+      --ctrl-text: #e8f4fd;
+      --dot-bg: #ffffff;
+      --title-color: #ffffff;
+      --tag-bg: rgba(33,150,243,0.14);
+      --tag-border: rgba(33,150,243,0.28);
+      --tag-hi-bg: rgba(0,229,255,0.16);
+      --tag-hi-border: rgba(0,229,255,0.38);
+      --contact-bg: rgba(255,255,255,0.07);
+      --contact-border: rgba(255,255,255,0.1);
+      --port-bg: rgba(255,255,255,0.05);
+      --port-border: rgba(255,255,255,0.09);
+      --lang-bg: rgba(255,255,255,0.05);
+      --lang-border: rgba(255,255,255,0.09);
+      --edu-border: rgba(255,255,255,0.06);
+      --orb-color: rgba(0,229,255,0.07);
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html.light {
+      --primary: #1565c0;
+      --accent: #0288d1;
+      --glow: rgba(2, 136, 209, 0.3);
+      --glass: rgba(255, 255, 255, 0.72);
+      --glass-border: rgba(33, 150, 243, 0.22);
+      --text: #1a2b3c;
+      --text-dim: #4a6688;
+      --bg-1: #e3f2fd;
+      --bg-2: #e8f4fd;
+      --bg-3: #f0f8ff;
+      --bg-4: #ddeeff;
+      --card-shadow: 0 8px 40px rgba(33,150,243,0.1), inset 0 1px 0 rgba(255,255,255,0.7);
+      --card-shadow-hover: 0 16px 50px rgba(33,150,243,0.18), 0 0 0 1px rgba(2,136,209,0.18);
+      --hero-shadow: 0 24px 64px rgba(33,150,243,0.18);
+      --ctrl-bg: rgba(255,255,255,0.82);
+      --ctrl-border: rgba(33,150,243,0.28);
+      --ctrl-text: #1a2b3c;
+      --dot-bg: #1a2b3c;
+      --title-color: #1a2b3c;
+      --tag-bg: rgba(33,150,243,0.1);
+      --tag-border: rgba(33,150,243,0.22);
+      --tag-hi-bg: rgba(2,136,209,0.14);
+      --tag-hi-border: rgba(2,136,209,0.32);
+      --contact-bg: rgba(33,150,243,0.07);
+      --contact-border: rgba(33,150,243,0.18);
+      --port-bg: rgba(33,150,243,0.06);
+      --port-border: rgba(33,150,243,0.15);
+      --lang-bg: rgba(33,150,243,0.06);
+      --lang-border: rgba(33,150,243,0.15);
+      --edu-border: rgba(33,150,243,0.12);
+      --orb-color: rgba(2,136,209,0.08);
+    }
 
+    /* ══════════════════════════
+       ANIMATIONS
+    ══════════════════════════ */
     @keyframes gradientBG {
       0%   { background-position: 0% 50%; }
       50%  { background-position: 100% 50%; }
@@ -32,7 +97,7 @@
     }
     @keyframes glow {
       0%, 100% { text-shadow: 0 0 12px var(--glow), 0 0 24px var(--glow); }
-      50%       { text-shadow: 0 0 24px var(--glow), 0 0 48px var(--glow), 0 0 70px rgba(0,229,255,0.2); }
+      50%       { text-shadow: 0 0 24px var(--glow), 0 0 48px var(--glow), 0 0 70px var(--glow); }
     }
     @keyframes pulseDot {
       0%, 100% { box-shadow: 0 0 0 0 var(--glow); }
@@ -52,21 +117,69 @@
       from { transform: translateX(100%); }
       to   { transform: translateX(-100%); }
     }
-    @keyframes avatarSpin {
-      from { --angle: 0deg; }
-      to   { --angle: 360deg; }
+    @keyframes langSwitch {
+      from { opacity: 0; transform: scale(0.96); }
+      to   { opacity: 1; transform: scale(1); }
     }
+
+    /* ══════════════════════════
+       BASE
+    ══════════════════════════ */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      background: linear-gradient(135deg, #08111f, #0d1e35, #0e2a4a, #091827, #08111f);
+      font-family: 'Noto Sans Arabic', 'Segoe UI', Tahoma, sans-serif;
+      background: linear-gradient(135deg, var(--bg-1), var(--bg-2), var(--bg-3), var(--bg-4), var(--bg-1));
       background-size: 400% 400%;
       min-height: 100vh;
       color: var(--text);
       animation: gradientBG 14s ease infinite;
       overflow-x: hidden;
+      transition: color 0.35s ease, background 0.35s ease;
+    }
+
+    /* ══════════════════════════
+       CONTROLS BAR
+    ══════════════════════════ */
+    .controls-bar {
+      position: fixed;
+      top: 16px;
+      inset-inline-end: 16px;
+      z-index: 200;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      animation: fadeIn 0.6s ease both;
+    }
+
+    .ctrl-btn {
+      background: var(--ctrl-bg);
+      border: 1px solid var(--ctrl-border);
+      border-radius: 30px;
+      padding: 8px 18px;
+      font-size: 0.82rem;
+      color: var(--ctrl-text);
+      cursor: pointer;
+      backdrop-filter: blur(14px);
+      transition: all 0.25s ease;
+      font-family: inherit;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    }
+
+    .ctrl-btn:hover {
+      background: rgba(0, 229, 255, 0.18);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0, 229, 255, 0.2);
+    }
+
+    html.light .ctrl-btn:hover {
+      box-shadow: 0 4px 16px rgba(2, 136, 209, 0.2);
     }
 
     /* ── Floating particles ── */
@@ -99,14 +212,14 @@
       backdrop-filter: blur(18px);
       border-radius: 20px;
       border: 1px solid var(--glass-border);
-      box-shadow: 0 8px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
+      box-shadow: var(--card-shadow), inset 0 1px 0 rgba(255,255,255,0.04);
       padding: 38px 42px;
       margin-bottom: 22px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.35s ease;
     }
     .card:hover {
       transform: translateY(-3px);
-      box-shadow: 0 16px 50px rgba(0,0,0,0.55), 0 0 0 1px rgba(0,229,255,0.14);
+      box-shadow: var(--card-shadow-hover);
     }
 
     /* ── Section title ── */
@@ -133,6 +246,15 @@
       flex: 1; height: 1px;
       background: linear-gradient(to left, transparent, rgba(0,229,255,0.28));
     }
+    html[dir="ltr"] .sec-title::after {
+      background: linear-gradient(to right, transparent, rgba(0,229,255,0.28));
+    }
+    html.light .sec-title::after {
+      background: linear-gradient(to left, transparent, rgba(2,136,209,0.28));
+    }
+    html.light[dir="ltr"] .sec-title::after {
+      background: linear-gradient(to right, transparent, rgba(2,136,209,0.28));
+    }
 
     /* ══════════════════════════
        HERO
@@ -149,9 +271,9 @@
       padding: 52px 52px 44px;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.55);
+      box-shadow: var(--hero-shadow);
+      transition: background 0.35s ease, box-shadow 0.35s ease;
     }
-    /* scanning top line */
     .hero-card::before {
       content: '';
       position: absolute;
@@ -160,13 +282,12 @@
       background: linear-gradient(90deg, transparent 0%, var(--accent) 40%, var(--primary) 60%, transparent 100%);
       animation: topLine 3s linear infinite;
     }
-    /* background glow orb */
     .hero-card::after {
       content: '';
       position: absolute;
       top: -90px; right: -90px;
       width: 320px; height: 320px;
-      background: radial-gradient(circle, rgba(0,229,255,0.07) 0%, transparent 68%);
+      background: radial-gradient(circle, var(--orb-color) 0%, transparent 68%);
       border-radius: 50%;
       animation: float 9s ease-in-out infinite;
       pointer-events: none;
@@ -186,6 +307,11 @@
       animation: pulseDot 3s ease-in-out infinite;
       position: relative;
       z-index: 1;
+      color: #fff;
+    }
+    html.light .avatar {
+      border-color: rgba(2,136,209,0.45);
+      color: #fff;
     }
 
     .hero-name {
@@ -196,6 +322,8 @@
       animation: glow 4s ease-in-out infinite;
       position: relative; z-index: 1;
     }
+    html.light .hero-name { color: #1a3a5c; }
+
     .hero-role {
       font-size: 1.1rem;
       color: var(--accent);
@@ -217,8 +345,8 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: var(--contact-bg);
+      border: 1px solid var(--contact-border);
       border-radius: 30px;
       padding: 7px 16px;
       font-size: 0.83rem;
@@ -229,7 +357,7 @@
     .contact:hover {
       background: rgba(0,229,255,0.14);
       border-color: var(--accent);
-      color: #fff;
+      color: var(--text);
       transform: translateY(-2px);
       box-shadow: 0 4px 14px rgba(0,229,255,0.18);
     }
@@ -239,7 +367,7 @@
     ══════════════════════════ */
     .summary-text {
       font-size: 0.98rem;
-      line-height: 1.95;
+      line-height: 2;
       color: var(--text-dim);
     }
 
@@ -258,8 +386,8 @@
     }
     .tags { display: flex; flex-wrap: wrap; gap: 8px; }
     .tag {
-      background: rgba(33,150,243,0.14);
-      border: 1px solid rgba(33,150,243,0.28);
+      background: var(--tag-bg);
+      border: 1px solid var(--tag-border);
       border-radius: 20px;
       padding: 6px 16px;
       font-size: 0.84rem;
@@ -273,39 +401,44 @@
       transform: translateY(-3px) scale(1.06);
       box-shadow: 0 5px 16px rgba(0,229,255,0.22);
     }
+    html.light .tag:hover {
+      box-shadow: 0 5px 16px rgba(2,136,209,0.2);
+    }
     .tag.hi {
-      background: rgba(0,229,255,0.16);
-      border-color: rgba(0,229,255,0.38);
+      background: var(--tag-hi-bg);
+      border-color: var(--tag-hi-border);
       font-weight: 600;
     }
 
     /* ══════════════════════════
        EXPERIENCE TIMELINE
     ══════════════════════════ */
-    .timeline { padding-right: 22px; position: relative; }
+    .timeline { padding-inline-start: 22px; position: relative; }
     .timeline::before {
       content: '';
       position: absolute;
-      right: 0; top: 6px; bottom: 0;
+      inset-inline-start: 0;
+      top: 6px; bottom: 0;
       width: 1px;
       background: linear-gradient(to bottom, var(--accent), rgba(0,229,255,0.05));
     }
     .tl-item {
       position: relative;
-      padding-right: 26px;
+      padding-inline-start: 26px;
       margin-bottom: 26px;
     }
     .tl-item:last-child { margin-bottom: 0; }
     .tl-dot {
       position: absolute;
-      right: -4.5px; top: 6px;
+      inset-inline-start: -4.5px;
+      top: 6px;
       width: 10px; height: 10px;
       border-radius: 50%;
       background: var(--accent);
       box-shadow: 0 0 8px var(--glow);
       animation: pulseDot 3s ease-in-out infinite;
     }
-    .tl-title { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 2px; }
+    .tl-title { font-size: 1rem; font-weight: 700; color: var(--title-color); margin-bottom: 2px; }
     .tl-company { font-size: 0.88rem; color: var(--accent); margin-bottom: 2px; }
     .tl-meta { font-size: 0.78rem; color: var(--text-dim); }
 
@@ -315,10 +448,10 @@
     .edu-item {
       margin-bottom: 20px;
       padding-bottom: 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid var(--edu-border);
     }
     .edu-item:last-child { margin-bottom: 0; padding-bottom: 0; border: none; }
-    .edu-degree { font-size: 0.98rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .edu-degree { font-size: 0.98rem; font-weight: 700; color: var(--title-color); margin-bottom: 4px; }
     .edu-school { font-size: 0.88rem; color: var(--accent); margin-bottom: 3px; }
     .edu-year { font-size: 0.78rem; color: var(--text-dim); }
 
@@ -327,8 +460,8 @@
     ══════════════════════════ */
     .lang-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
     .lang-item {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.09);
+      background: var(--lang-bg);
+      border: 1px solid var(--lang-border);
       border-radius: 14px;
       padding: 16px 12px;
       text-align: center;
@@ -339,13 +472,17 @@
       border-color: rgba(0,229,255,0.3);
       transform: translateY(-3px);
     }
-    .lang-name { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    html.light .lang-item:hover {
+      background: rgba(2,136,209,0.1);
+      border-color: rgba(2,136,209,0.3);
+    }
+    .lang-name { font-size: 0.95rem; font-weight: 700; color: var(--title-color); margin-bottom: 4px; }
     .lang-lvl { font-size: 0.78rem; color: var(--accent); }
 
     /* ══════════════════════════
        PORTFOLIO
     ══════════════════════════ */
-    .port-note { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 18px; line-height: 1.7; }
+    .port-note { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 18px; line-height: 1.8; }
     .port-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
@@ -353,8 +490,8 @@
     }
     .port-link {
       display: block;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.09);
+      background: var(--port-bg);
+      border: 1px solid var(--port-border);
       border-radius: 12px;
       padding: 11px 14px;
       color: var(--text-dim);
@@ -369,9 +506,14 @@
     .port-link:hover {
       background: rgba(0,229,255,0.1);
       border-color: rgba(0,229,255,0.32);
-      color: #fff;
+      color: var(--text);
       transform: translateY(-2px);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    }
+    html.light .port-link:hover {
+      background: rgba(2,136,209,0.1);
+      border-color: rgba(2,136,209,0.3);
+      box-shadow: 0 4px 16px rgba(2,136,209,0.12);
     }
 
     /* ══════════════════════════
@@ -383,6 +525,9 @@
       transition: opacity 0.65s ease, transform 0.65s ease;
     }
     .reveal.in { opacity: 1; transform: translateY(0); }
+
+    /* Lang switch animation */
+    .lang-anim { animation: langSwitch 0.35s cubic-bezier(0.22,1,0.36,1) both; }
 
     /* ══════════════════════════
        FOOTER
@@ -401,10 +546,18 @@
       .card { padding: 28px 22px; }
       .port-grid { grid-template-columns: 1fr; }
       .lang-grid { grid-template-columns: repeat(3, 1fr); }
+      .controls-bar { top: 10px; inset-inline-end: 10px; }
+      .ctrl-btn { padding: 7px 13px; font-size: 0.78rem; }
     }
   </style>
 </head>
 <body>
+
+  <!-- Controls -->
+  <div class="controls-bar">
+    <button id="themeToggle" class="ctrl-btn" title="Toggle theme"></button>
+    <button id="langToggle" class="ctrl-btn" title="Toggle language"></button>
+  </div>
 
   <div id="particles"></div>
 
@@ -415,33 +568,28 @@
       <div class="hero-card">
         <div class="avatar">M</div>
         <h1 class="hero-name">Mohammed Ali Salim</h1>
-        <div class="hero-role">Frontend Developer</div>
+        <div class="hero-role" data-i18n="heroRole"></div>
         <div class="contacts">
           <a class="contact" href="mailto:salamali731@gmail.com">✉ salamali731@gmail.com</a>
           <a class="contact" href="tel:+9647822181094">📱 +964 782 218 1094</a>
           <a class="contact" href="https://github.com/mhmdali98" target="_blank">⌥ github.com/mhmdali98</a>
-          <span class="contact">📍 Iraq, Karbala</span>
+          <span class="contact">📍 <span data-i18n="location"></span></span>
         </div>
       </div>
     </section>
 
     <!-- SUMMARY -->
     <div class="card reveal">
-      <div class="sec-title">Summary</div>
-      <p class="summary-text">
-        Front-End Developer with experience using Vue.js and Nuxt.js to build production-level,
-        user-focused web applications. I enjoy writing clean, well-structured code and turning
-        designs into responsive and clear web interfaces. I have worked with APIs, collaborated
-        on design implementation, and made improvements to performance and usability.
-      </p>
+      <div class="sec-title" data-i18n="secSummary"></div>
+      <p class="summary-text" data-i18n="summaryText"></p>
     </div>
 
     <!-- SKILLS -->
     <div class="card reveal">
-      <div class="sec-title">Skills</div>
+      <div class="sec-title" data-i18n="secSkills"></div>
 
       <div class="skill-group">
-        <div class="skill-label">Front-End</div>
+        <div class="skill-label" data-i18n="skillFrontend"></div>
         <div class="tags">
           <span class="tag hi">Vue.js</span>
           <span class="tag hi">Nuxt.js</span>
@@ -452,7 +600,7 @@
       </div>
 
       <div class="skill-group">
-        <div class="skill-label">Back-End</div>
+        <div class="skill-label" data-i18n="skillBackend"></div>
         <div class="tags">
           <span class="tag">Node.js</span>
           <span class="tag">NestJS</span>
@@ -462,7 +610,7 @@
       </div>
 
       <div class="skill-group">
-        <div class="skill-label">Database</div>
+        <div class="skill-label" data-i18n="skillDatabase"></div>
         <div class="tags">
           <span class="tag">SQL Server</span>
           <span class="tag">PostgreSQL</span>
@@ -471,7 +619,7 @@
       </div>
 
       <div class="skill-group">
-        <div class="skill-label">UI/UX & Tools</div>
+        <div class="skill-label" data-i18n="skillUiux"></div>
         <div class="tags">
           <span class="tag">Adobe XD</span>
           <span class="tag">Illustrator</span>
@@ -481,67 +629,67 @@
       </div>
 
       <div class="skill-group">
-        <div class="skill-label">Soft Skills</div>
+        <div class="skill-label" data-i18n="skillSoft"></div>
         <div class="tags">
-          <span class="tag">Teamwork</span>
-          <span class="tag">Teaching / Lecturing</span>
-          <span class="tag">UI/UX Design</span>
+          <span class="tag" data-i18n="softTeamwork"></span>
+          <span class="tag" data-i18n="softTeaching"></span>
+          <span class="tag" data-i18n="softUiux"></span>
         </div>
       </div>
     </div>
 
     <!-- EXPERIENCE -->
     <div class="card reveal">
-      <div class="sec-title">Work Experience</div>
+      <div class="sec-title" data-i18n="secExperience"></div>
       <div class="timeline">
 
         <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-title">Web Developer</div>
-          <div class="tl-company">Shams Telecom</div>
-          <div class="tl-meta">Iraq / Remote · Sep 2024 – Present</div>
+          <div class="tl-title" data-i18n="job1Title"></div>
+          <div class="tl-company" data-i18n="job1Company"></div>
+          <div class="tl-meta" data-i18n="job1Meta"></div>
         </div>
 
         <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-title">FrontEnd Developer</div>
-          <div class="tl-company">Digital Logic Company</div>
-          <div class="tl-meta">Iraq / Remote · Jan 2024 – Aug 2024</div>
+          <div class="tl-title" data-i18n="job2Title"></div>
+          <div class="tl-company" data-i18n="job2Company"></div>
+          <div class="tl-meta" data-i18n="job2Meta"></div>
         </div>
 
         <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-title">Full-stack Developer</div>
-          <div class="tl-company">Starsphere Company</div>
-          <div class="tl-meta">Iraq / Baghdad · 2023 – 2025</div>
+          <div class="tl-title" data-i18n="job3Title"></div>
+          <div class="tl-company" data-i18n="job3Company"></div>
+          <div class="tl-meta" data-i18n="job3Meta"></div>
         </div>
 
         <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-title">FrontEnd Developer</div>
-          <div class="tl-company">Echo Tech Company</div>
-          <div class="tl-meta">Iraq / Remote · 2022 – 2023</div>
+          <div class="tl-title" data-i18n="job4Title"></div>
+          <div class="tl-company" data-i18n="job4Company"></div>
+          <div class="tl-meta" data-i18n="job4Meta"></div>
         </div>
 
         <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-title">Web Developer</div>
-          <div class="tl-company">Mediatriple Company</div>
-          <div class="tl-meta">Turkey / Remote · 2021 – 2022</div>
+          <div class="tl-title" data-i18n="job5Title"></div>
+          <div class="tl-company" data-i18n="job5Company"></div>
+          <div class="tl-meta" data-i18n="job5Meta"></div>
         </div>
 
         <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-title">Full-stack Web Developer</div>
-          <div class="tl-company">Alkafeel Institute for Information Technology</div>
-          <div class="tl-meta">Iraq / Karbala · 2021</div>
+          <div class="tl-title" data-i18n="job6Title"></div>
+          <div class="tl-company" data-i18n="job6Company"></div>
+          <div class="tl-meta" data-i18n="job6Meta"></div>
         </div>
 
         <div class="tl-item">
           <div class="tl-dot"></div>
-          <div class="tl-title">Software Developer</div>
-          <div class="tl-company">Enjaz QiCard Company</div>
-          <div class="tl-meta">Iraq / Baghdad · 2019 – 2021</div>
+          <div class="tl-title" data-i18n="job7Title"></div>
+          <div class="tl-company" data-i18n="job7Company"></div>
+          <div class="tl-meta" data-i18n="job7Meta"></div>
         </div>
 
       </div>
@@ -549,47 +697,44 @@
 
     <!-- EDUCATION -->
     <div class="card reveal">
-      <div class="sec-title">Education</div>
+      <div class="sec-title" data-i18n="secEducation"></div>
 
       <div class="edu-item">
-        <div class="edu-degree">M.Sc. Candidate — Computer Engineering (Artificial Intelligence)</div>
-        <div class="edu-school">Postgraduate Studies</div>
-        <div class="edu-year">In Progress</div>
+        <div class="edu-degree" data-i18n="edu1Degree"></div>
+        <div class="edu-school" data-i18n="edu1School"></div>
+        <div class="edu-year" data-i18n="edu1Year"></div>
       </div>
 
       <div class="edu-item">
-        <div class="edu-degree">Bachelor of Information Technology</div>
-        <div class="edu-school">University of Information and Communication Technology — Business Information Technology</div>
-        <div class="edu-year">Graduated 2019 – 2020</div>
+        <div class="edu-degree" data-i18n="edu2Degree"></div>
+        <div class="edu-school" data-i18n="edu2School"></div>
+        <div class="edu-year" data-i18n="edu2Year"></div>
       </div>
     </div>
 
     <!-- LANGUAGES -->
     <div class="card reveal">
-      <div class="sec-title">Languages</div>
+      <div class="sec-title" data-i18n="secLanguages"></div>
       <div class="lang-grid">
         <div class="lang-item">
-          <div class="lang-name">Arabic</div>
-          <div class="lang-lvl">Native</div>
+          <div class="lang-name" data-i18n="langArabic"></div>
+          <div class="lang-lvl" data-i18n="langArabicLvl"></div>
         </div>
         <div class="lang-item">
-          <div class="lang-name">English</div>
-          <div class="lang-lvl">Average</div>
+          <div class="lang-name" data-i18n="langEnglish"></div>
+          <div class="lang-lvl" data-i18n="langEnglishLvl"></div>
         </div>
         <div class="lang-item">
-          <div class="lang-name">Persian</div>
-          <div class="lang-lvl">Acceptable</div>
+          <div class="lang-name" data-i18n="langPersian"></div>
+          <div class="lang-lvl" data-i18n="langPersianLvl"></div>
         </div>
       </div>
     </div>
 
     <!-- PORTFOLIO -->
     <div class="card reveal">
-      <div class="sec-title">Portfolio</div>
-      <p class="port-note">
-        Most work is for private company systems and cannot be shared publicly.
-        These are available public demos and live projects:
-      </p>
+      <div class="sec-title" data-i18n="secPortfolio"></div>
+      <p class="port-note" data-i18n="portNote"></p>
       <div class="port-grid">
         <a class="port-link" href="https://www.serahalbelad.com" target="_blank">serahalbelad.com</a>
         <a class="port-link" href="https://shams-tele.com/ar" target="_blank">shams-tele.com</a>
@@ -602,18 +747,202 @@
         <a class="port-link" href="https://menuv2.netlify.app/" target="_blank">menuv2.netlify.app</a>
         <a class="port-link" href="https://shams-ai.up.railway.app/" target="_blank">shams-ai.railway.app</a>
         <a class="port-link" href="https://meunrecommenderfront-production.up.railway.app/" target="_blank">meunrecommender.railway.app</a>
-        <a class="port-link" href="https://drive.google.com/folderview?id=1OPNNfUshOTAK3G8140TqgbXMnjUx9XBh" target="_blank">More work — Google Drive</a>
+        <a class="port-link" href="https://drive.google.com/folderview?id=1OPNNfUshOTAK3G8140TqgbXMnjUx9XBh" target="_blank" data-i18n="portMore"></a>
       </div>
     </div>
 
-    <footer>
-      Thank you for reviewing my CV &nbsp;·&nbsp; Mohammed Ali Salim &nbsp;·&nbsp; Frontend Developer
-    </footer>
+    <footer data-i18n="footer"></footer>
 
   </div>
 
   <script>
-    // ── Floating particles
+    /* ══════════════════════════
+       TRANSLATIONS
+    ══════════════════════════ */
+    const t = {
+      en: {
+        heroRole:    'Frontend Developer',
+        location:    'Iraq, Karbala',
+        secSummary:  'Summary',
+        summaryText: 'Front-End Developer with experience using Vue.js and Nuxt.js to build production-level, user-focused web applications. I enjoy writing clean, well-structured code and turning designs into responsive and clear web interfaces. I have worked with APIs, collaborated on design implementation, and made improvements to performance and usability.',
+        secSkills:   'Skills',
+        skillFrontend: 'Front-End',
+        skillBackend:  'Back-End',
+        skillDatabase: 'Database',
+        skillUiux:     'UI/UX & Tools',
+        skillSoft:     'Soft Skills',
+        softTeamwork:  'Teamwork',
+        softTeaching:  'Teaching / Lecturing',
+        softUiux:      'UI/UX Design',
+        secExperience: 'Work Experience',
+        job1Title:   'Web Developer',
+        job1Company: 'Shams Telecom',
+        job1Meta:    'Iraq / Remote · Sep 2024 – Present',
+        job2Title:   'FrontEnd Developer',
+        job2Company: 'Digital Logic Company',
+        job2Meta:    'Iraq / Remote · Jan 2024 – Aug 2024',
+        job3Title:   'Full-stack Developer',
+        job3Company: 'Starsphere Company',
+        job3Meta:    'Iraq / Baghdad · 2023 – 2025',
+        job4Title:   'FrontEnd Developer',
+        job4Company: 'Echo Tech Company',
+        job4Meta:    'Iraq / Remote · 2022 – 2023',
+        job5Title:   'Web Developer',
+        job5Company: 'Mediatriple Company',
+        job5Meta:    'Turkey / Remote · 2021 – 2022',
+        job6Title:   'Full-stack Web Developer',
+        job6Company: 'Alkafeel Institute for Information Technology',
+        job6Meta:    'Iraq / Karbala · 2021',
+        job7Title:   'Software Developer',
+        job7Company: 'Enjaz QiCard Company',
+        job7Meta:    'Iraq / Baghdad · 2019 – 2021',
+        secEducation: 'Education',
+        edu1Degree:  'M.Sc. Candidate — Computer Engineering (Artificial Intelligence)',
+        edu1School:  'Postgraduate Studies',
+        edu1Year:    'In Progress',
+        edu2Degree:  'Bachelor of Information Technology',
+        edu2School:  'University of Information and Communication Technology — Business Information Technology',
+        edu2Year:    'Graduated 2019 – 2020',
+        secLanguages:  'Languages',
+        langArabic:    'Arabic',
+        langArabicLvl: 'Native',
+        langEnglish:    'English',
+        langEnglishLvl: 'Average',
+        langPersian:    'Persian',
+        langPersianLvl: 'Acceptable',
+        secPortfolio: 'Portfolio',
+        portNote:  'Most work is for private company systems and cannot be shared publicly. These are available public demos and live projects:',
+        portMore:  'More work — Google Drive',
+        footer:    'Thank you for reviewing my CV · Mohammed Ali Salim · Frontend Developer',
+      },
+      ar: {
+        heroRole:    'مطور واجهات أمامية',
+        location:    'العراق، كربلاء',
+        secSummary:  'الملخص',
+        summaryText: 'مطور واجهات أمامية بخبرة في استخدام Vue.js وNuxt.js لبناء تطبيقات ويب على مستوى الإنتاج موجهة للمستخدم. أستمتع بكتابة كود نظيف ومنظم جيداً وتحويل التصاميم إلى واجهات ويب متجاوبة وواضحة. عملت مع واجهات برمجية، وتعاونت في تنفيذ التصاميم، وأجريت تحسينات على الأداء وقابلية الاستخدام.',
+        secSkills:   'المهارات',
+        skillFrontend: 'الواجهة الأمامية',
+        skillBackend:  'الخادم الخلفي',
+        skillDatabase: 'قواعد البيانات',
+        skillUiux:     'تصميم وأدوات',
+        skillSoft:     'المهارات الشخصية',
+        softTeamwork:  'العمل الجماعي',
+        softTeaching:  'التدريس والمحاضرات',
+        softUiux:      'تصميم UI/UX',
+        secExperience: 'الخبرة العملية',
+        job1Title:   'مطور ويب',
+        job1Company: 'شمس تيليكوم',
+        job1Meta:    'العراق / عن بعد · سبتمبر 2024 – الآن',
+        job2Title:   'مطور واجهات أمامية',
+        job2Company: 'شركة ديجيتال لوجيك',
+        job2Meta:    'العراق / عن بعد · يناير 2024 – أغسطس 2024',
+        job3Title:   'مطور متكامل',
+        job3Company: 'شركة ستارسفير',
+        job3Meta:    'العراق / بغداد · 2023 – 2025',
+        job4Title:   'مطور واجهات أمامية',
+        job4Company: 'شركة إيكو تك',
+        job4Meta:    'العراق / عن بعد · 2022 – 2023',
+        job5Title:   'مطور ويب',
+        job5Company: 'شركة ميدياتريبل',
+        job5Meta:    'تركيا / عن بعد · 2021 – 2022',
+        job6Title:   'مطور ويب متكامل',
+        job6Company: 'معهد الكفيل لتقنية المعلومات',
+        job6Meta:    'العراق / كربلاء · 2021',
+        job7Title:   'مطور برمجيات',
+        job7Company: 'شركة إنجاز QiCard',
+        job7Meta:    'العراق / بغداد · 2019 – 2021',
+        secEducation: 'التعليم',
+        edu1Degree:  'طالب ماجستير — هندسة الحاسوب (الذكاء الاصطناعي)',
+        edu1School:  'الدراسات العليا',
+        edu1Year:    'قيد الدراسة',
+        edu2Degree:  'بكالوريوس تقنية المعلومات',
+        edu2School:  'جامعة تقنية المعلومات والاتصالات — تقنية معلومات الأعمال',
+        edu2Year:    'تخرج 2019 – 2020',
+        secLanguages:  'اللغات',
+        langArabic:    'العربية',
+        langArabicLvl: 'اللغة الأم',
+        langEnglish:    'الإنجليزية',
+        langEnglishLvl: 'متوسط',
+        langPersian:    'الفارسية',
+        langPersianLvl: 'مقبول',
+        secPortfolio: 'المشاريع',
+        portNote:  'معظم الأعمال لأنظمة شركات خاصة ولا يمكن مشاركتها علنًا. فيما يلي العروض التجريبية العامة والمشاريع الحية:',
+        portMore:  'مزيد من الأعمال — Google Drive',
+        footer:    'شكراً لمراجعة سيرتي الذاتية · محمد علي سالم · مطور واجهات أمامية',
+      }
+    };
+
+    /* ══════════════════════════
+       STATE
+    ══════════════════════════ */
+    let lang  = localStorage.getItem('cv-lang')  || 'en';
+    let theme = localStorage.getItem('cv-theme') || 'dark';
+
+    /* ══════════════════════════
+       THEME
+    ══════════════════════════ */
+    function applyTheme(th) {
+      theme = th;
+      localStorage.setItem('cv-theme', th);
+      if (th === 'light') {
+        document.documentElement.classList.add('light');
+      } else {
+        document.documentElement.classList.remove('light');
+      }
+      updateThemeBtn();
+    }
+
+    function updateThemeBtn() {
+      const btn = document.getElementById('themeToggle');
+      if (theme === 'dark') {
+        btn.textContent = lang === 'ar' ? '☀️ فاتح' : '☀️ Light';
+      } else {
+        btn.textContent = lang === 'ar' ? '🌙 داكن' : '🌙 Dark';
+      }
+    }
+
+    /* ══════════════════════════
+       LANGUAGE
+    ══════════════════════════ */
+    function applyLang(l) {
+      lang = l;
+      localStorage.setItem('cv-lang', l);
+      const html = document.documentElement;
+      html.lang = l;
+      html.dir  = l === 'ar' ? 'rtl' : 'ltr';
+      document.title = l === 'ar'
+        ? 'محمد علي سالم - مطور واجهات أمامية'
+        : 'Mohammed Ali Salim - Frontend Developer';
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (t[l][key] !== undefined) el.textContent = t[l][key];
+      });
+
+      document.getElementById('langToggle').textContent = l === 'ar' ? 'English' : 'عربي';
+      updateThemeBtn();
+
+      // Brief animation on body to signal language switch
+      document.body.classList.remove('lang-anim');
+      void document.body.offsetWidth;
+      document.body.classList.add('lang-anim');
+    }
+
+    /* ══════════════════════════
+       INIT
+    ══════════════════════════ */
+    applyTheme(theme);
+    applyLang(lang);
+
+    document.getElementById('themeToggle').addEventListener('click', () =>
+      applyTheme(theme === 'dark' ? 'light' : 'dark'));
+
+    document.getElementById('langToggle').addEventListener('click', () =>
+      applyLang(lang === 'en' ? 'ar' : 'en'));
+
+    /* ══════════════════════════
+       FLOATING PARTICLES
+    ══════════════════════════ */
     const pc = document.getElementById('particles');
     for (let i = 0; i < 35; i++) {
       const el = document.createElement('div');
@@ -630,7 +959,9 @@
       pc.appendChild(el);
     }
 
-    // ── Scroll reveal
+    /* ══════════════════════════
+       SCROLL REVEAL
+    ══════════════════════════ */
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
     }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
