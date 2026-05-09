@@ -1015,6 +1015,221 @@
     .port-host { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--text-dim); margin-top: auto; }
 
     /* ══════════════════════════════════════════════════════════════
+       NEWS / TECH PULSE
+    ══════════════════════════════════════════════════════════════ */
+    .news-bar {
+      display: flex; align-items: center; gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 26px;
+    }
+    .news-tabs {
+      display: inline-flex;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      padding: 5px;
+      border-radius: 999px;
+      backdrop-filter: blur(12px);
+    }
+    .news-tab {
+      padding: 9px 18px;
+      border-radius: 999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-soft);
+      transition: color 0.25s ease, background 0.3s ease;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+    .news-tab:hover { color: var(--text); }
+    .news-tab.active {
+      color: #00131a;
+      background: var(--gradient-1);
+      box-shadow: var(--shadow-glow);
+    }
+    html.light .news-tab.active { color: #fff; }
+    .news-status {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      color: var(--text-dim);
+      margin-inline-start: auto;
+    }
+    .news-status .live-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 0 var(--accent);
+      animation: pulseDot 2s infinite;
+    }
+    .news-refresh {
+      width: 38px; height: 38px;
+      border-radius: 11px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      color: var(--text-soft);
+      display: grid; place-items: center;
+      transition: all 0.3s ease;
+    }
+    .news-refresh:hover { color: var(--primary); border-color: var(--glass-border-strong); transform: rotate(90deg); }
+    .news-refresh svg { width: 16px; height: 16px; }
+    .news-refresh.spinning svg { animation: spin 1s linear infinite; }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 18px;
+      min-height: 200px;
+    }
+    .news-card {
+      position: relative;
+      padding: 22px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      display: flex; flex-direction: column;
+      gap: 12px;
+      min-height: 180px;
+      overflow: hidden;
+      transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .news-card::before {
+      content: '';
+      position: absolute; inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, transparent 30%, var(--primary) 50%, transparent 70%);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .news-card:hover { transform: translateY(-5px); border-color: var(--glass-border-strong); box-shadow: var(--shadow-md), var(--shadow-glow); }
+    .news-card:hover::before { opacity: 0.7; }
+    .news-card-head {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      gap: 10px;
+    }
+    .news-source {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      padding: 3px 9px;
+      background: rgba(0,229,255,0.10);
+      border: 1px solid rgba(0,229,255,0.22);
+      color: var(--primary);
+      border-radius: 999px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 60%;
+    }
+    .news-points {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      color: var(--warn);
+      flex-shrink: 0;
+    }
+    .news-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.02rem;
+      line-height: 1.4;
+      color: var(--text);
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .news-meta {
+      margin-top: auto;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      color: var(--text-dim);
+    }
+    .news-meta-arrow {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      display: grid; place-items: center;
+      color: var(--text-soft);
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    .news-meta-arrow svg { width: 13px; height: 13px; }
+    .news-card:hover .news-meta-arrow { background: var(--gradient-1); color: #00131a; transform: rotate(-45deg); border-color: transparent; }
+    html.light .news-card:hover .news-meta-arrow { color: #fff; }
+
+    /* Skeleton */
+    .news-skeleton {
+      padding: 22px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      min-height: 180px;
+      position: relative;
+      overflow: hidden;
+    }
+    .news-skeleton::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.06) 50%, transparent 70%);
+      animation: shimmer 1.5s linear infinite;
+    }
+    .sk-line {
+      height: 12px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.06);
+      margin-bottom: 10px;
+    }
+    .sk-line.short { width: 40%; }
+    .sk-line.long { width: 90%; }
+    .sk-line.tall { height: 18px; margin-top: 10px; }
+
+    .news-empty {
+      grid-column: 1 / -1;
+      padding: 50px 30px;
+      text-align: center;
+      background: var(--glass);
+      border: 1px dashed var(--glass-border);
+      border-radius: 18px;
+      color: var(--text-dim);
+    }
+    .news-empty .ne-icon {
+      width: 50px; height: 50px;
+      border-radius: 14px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      display: inline-grid; place-items: center;
+      color: var(--text-soft);
+      margin-bottom: 14px;
+    }
+    .news-empty button {
+      margin-top: 14px;
+      padding: 10px 22px;
+      border-radius: 10px;
+      background: var(--gradient-1);
+      color: #00131a;
+      font-weight: 600;
+      transition: transform 0.25s ease, box-shadow 0.3s ease;
+    }
+    html.light .news-empty button { color: #fff; }
+    .news-empty button:hover { transform: translateY(-2px); box-shadow: var(--shadow-glow); }
+
+    @keyframes shimmer {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(100%); }
+    }
+    html[dir="rtl"] @keyframes shimmer {
+      from { transform: translateX(100%); }
+      to { transform: translateX(-100%); }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
        CONTACT CTA
     ══════════════════════════════════════════════════════════════ */
     .cta-card {
@@ -1194,6 +1409,7 @@
         <li><a href="#skills" data-i18n="navSkills"></a></li>
         <li><a href="#experience" data-i18n="navExperience"></a></li>
         <li><a href="#portfolio" data-i18n="navPortfolio"></a></li>
+        <li><a href="#news" data-i18n="navNews"></a></li>
         <li><a href="#contact" data-i18n="navContact"></a></li>
       </ul>
       <div class="nav-controls">
@@ -1223,6 +1439,7 @@
     <a href="#skills" data-drawer-link data-i18n="navSkills"></a>
     <a href="#experience" data-drawer-link data-i18n="navExperience"></a>
     <a href="#portfolio" data-drawer-link data-i18n="navPortfolio"></a>
+    <a href="#news" data-drawer-link data-i18n="navNews"></a>
     <a href="#contact" data-drawer-link data-i18n="navContact"></a>
   </div>
 
@@ -1870,6 +2087,33 @@
     </div>
   </section>
 
+  <!-- NEWS / TECH PULSE -->
+  <section id="news">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="section-eyebrow" data-i18n="ebNews"></div>
+        <h2 class="section-title" data-i18n="newsTitle"></h2>
+        <p class="section-sub" data-i18n="newsSub"></p>
+      </div>
+      <div class="news-bar reveal">
+        <div class="news-tabs" id="newsTabs">
+          <button class="news-tab active" data-feed="tech" data-i18n="newsTabTech"></button>
+          <button class="news-tab" data-feed="ai" data-i18n="newsTabAi"></button>
+          <button class="news-tab" data-feed="research" data-i18n="newsTabResearch"></button>
+        </div>
+        <div class="news-status">
+          <span class="live-dot"></span>
+          <span data-i18n="newsLive"></span>
+          <span id="newsUpdated"></span>
+        </div>
+        <button class="news-refresh" id="newsRefresh" title="Refresh" aria-label="Refresh">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        </button>
+      </div>
+      <div class="news-grid" id="newsGrid"></div>
+    </div>
+  </section>
+
   <!-- CONTACT -->
   <section id="contact">
     <div class="wrap">
@@ -1922,7 +2166,7 @@
     ══════════════════════════════════════════════════════════════ */
     const I18N = {
       en: {
-        navAbout: 'About', navSkills: 'Skills', navExperience: 'Experience', navPortfolio: 'Portfolio', navContact: 'Contact',
+        navAbout: 'About', navSkills: 'Skills', navExperience: 'Experience', navPortfolio: 'Portfolio', navNews: 'News', navContact: 'Contact',
         heroPill: 'Available for new projects',
         heroName: 'Mohammed Ali <span class="accent">Salim</span>',
         heroIam: "I'm a",
@@ -2022,6 +2266,19 @@
         proj8Title: 'Shams Telecom — Corporate Website',
         proj8Desc: 'Bilingual corporate website for Shams Telecom delivering a fast, responsive presence and showcasing their products and services.',
 
+        ebNews: 'Tech Pulse',
+        newsTitle: 'Latest in Tech, AI & Research',
+        newsSub: 'Live feed pulled from Hacker News — what the global tech community is reading right now in software, AI/ML, and research papers.',
+        newsTabTech: 'Tech',
+        newsTabAi: 'AI / ML',
+        newsTabResearch: 'Research',
+        newsLive: 'Live',
+        newsBy: 'by',
+        newsAgo: ' ago',
+        newsLoadFail: 'Could not load the feed right now.',
+        newsRetry: 'Try again',
+        newsRead: 'Read',
+
         ebContact: 'Get in touch',
         ctaTitle: "Have a project in mind? Let's build it together.",
         ctaSub: "Frontend, full-stack, or AI — I'm open to remote roles, freelance projects, and collaborations.",
@@ -2029,7 +2286,7 @@
         footerBuilt: 'Crafted with code, coffee, and curiosity.',
       },
       ar: {
-        navAbout: 'من أنا', navSkills: 'المهارات', navExperience: 'الخبرة', navPortfolio: 'المشاريع', navContact: 'تواصل',
+        navAbout: 'من أنا', navSkills: 'المهارات', navExperience: 'الخبرة', navPortfolio: 'المشاريع', navNews: 'الأخبار', navContact: 'تواصل',
         heroPill: 'متاح لمشاريع جديدة',
         heroName: 'محمد علي <span class="accent">سالم</span>',
         heroIam: 'أنا',
@@ -2129,6 +2386,19 @@
         proj8Title: 'شمس تيليكوم — الموقع الرسمي',
         proj8Desc: 'موقع رسمي ثنائي اللغة لشركة شمس تيليكوم، سريع ومتجاوب، يعرض منتجاتهم وخدماتهم.',
 
+        ebNews: 'نبض التقنية',
+        newsTitle: 'أحدث أخبار التقنية والذكاء الاصطناعي والأبحاث',
+        newsSub: 'موجز حي من Hacker News — ما يقرأه المجتمع التقني العالمي الآن في البرمجيات والذكاء الاصطناعي والأبحاث.',
+        newsTabTech: 'تقنية',
+        newsTabAi: 'ذكاء اصطناعي',
+        newsTabResearch: 'أبحاث',
+        newsLive: 'مباشر',
+        newsBy: 'بواسطة',
+        newsAgo: ' مضت',
+        newsLoadFail: 'تعذّر جلب الموجز الآن.',
+        newsRetry: 'حاول مجدداً',
+        newsRead: 'قراءة',
+
         ebContact: 'تواصل معي',
         ctaTitle: 'لديك مشروع في بالك؟ لنبنه معًا.',
         ctaSub: 'واجهات أمامية أو Full-Stack أو ذكاء اصطناعي — مفتوح للوظائف عن بُعد، المشاريع المستقلة، والتعاونات.',
@@ -2225,7 +2495,7 @@
     const progressBar = document.getElementById('scrollProgress');
     const topnav = document.getElementById('topnav');
     const navLinks = document.querySelectorAll('.nav-links a');
-    const sections = ['home', 'about', 'skills', 'experience', 'portfolio', 'contact'].map(id => document.getElementById(id));
+    const sections = ['home', 'about', 'skills', 'experience', 'portfolio', 'news', 'contact'].map(id => document.getElementById(id));
 
     function onScroll() {
       const h = document.documentElement;
@@ -2366,6 +2636,168 @@
       stage.addEventListener('mouseleave', () => { stage.style.transform = ''; });
       stage.style.transition = 'transform 0.4s ease';
     }
+
+    /* ══════════════════════════════════════════════════════════════
+       NEWS / TECH PULSE
+    ══════════════════════════════════════════════════════════════ */
+    const NEWS_FEEDS = {
+      tech: 'https://hn.algolia.com/api/v1/search?tags=front_page&hitsPerPage=9',
+      ai: 'https://hn.algolia.com/api/v1/search_by_date?query=%22AI%22%20OR%20%22LLM%22%20OR%20%22GPT%22%20OR%20%22Anthropic%22%20OR%20%22OpenAI%22%20OR%20%22machine%20learning%22&tags=story&hitsPerPage=9',
+      research: 'https://hn.algolia.com/api/v1/search_by_date?query=%22arxiv%22%20OR%20%22paper%22%20OR%20%22research%22%20OR%20%22study%22&tags=story&hitsPerPage=9'
+    };
+    const NEWS_TTL_MS = 10 * 60 * 1000;
+    let currentFeed = 'tech';
+
+    function timeAgo(ts) {
+      const d = (Date.now() / 1000) - ts;
+      const dict = I18N[lang];
+      const units = lang === 'ar'
+        ? [[60,'ث'],[3600,'د'],[86400,'س'],[2592000,'يوم'],[31536000,'شهر'],[Infinity,'سنة']]
+        : [[60,'s'],[3600,'m'],[86400,'h'],[2592000,'d'],[31536000,'mo'],[Infinity,'y']];
+      const divs = [1, 60, 3600, 86400, 2592000, 31536000];
+      for (let i = 0; i < units.length; i++) {
+        if (d < units[i][0]) return Math.max(1, Math.floor(d / divs[i])) + units[i][1] + dict.newsAgo;
+      }
+      return '';
+    }
+
+    function hostFromUrl(url) {
+      try { return new URL(url).hostname.replace(/^www\./, ''); }
+      catch { return 'news.ycombinator.com'; }
+    }
+
+    function newsUrl(hit) {
+      return hit.url || `https://news.ycombinator.com/item?id=${hit.objectID}`;
+    }
+
+    function escapeHtml(str) {
+      return (str || '').replace(/[&<>"']/g, c =>
+        ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    function renderSkeleton() {
+      const grid = document.getElementById('newsGrid');
+      grid.innerHTML = Array.from({length: 6}).map(() => `
+        <div class="news-skeleton">
+          <div class="sk-line short"></div>
+          <div class="sk-line tall long"></div>
+          <div class="sk-line tall long"></div>
+          <div class="sk-line short" style="margin-top:auto;"></div>
+        </div>
+      `).join('');
+    }
+
+    function renderEmpty(retry) {
+      const dict = I18N[lang];
+      const grid = document.getElementById('newsGrid');
+      grid.innerHTML = `
+        <div class="news-empty">
+          <div class="ne-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div>${dict.newsLoadFail}</div>
+          <button id="newsRetry">${dict.newsRetry}</button>
+        </div>
+      `;
+      document.getElementById('newsRetry').addEventListener('click', retry);
+    }
+
+    function renderHits(hits) {
+      const dict = I18N[lang];
+      const grid = document.getElementById('newsGrid');
+      if (!hits || !hits.length) { renderEmpty(() => loadFeed(currentFeed, true)); return; }
+      grid.innerHTML = hits.map(h => {
+        const url = newsUrl(h);
+        const host = hostFromUrl(url);
+        const title = escapeHtml(h.title || h.story_title || '');
+        const author = escapeHtml(h.author || '');
+        const points = h.points || 0;
+        const ts = h.created_at_i || (h.created_at ? Math.floor(new Date(h.created_at).getTime()/1000) : Date.now()/1000);
+        return `
+          <a class="news-card" href="${url}" target="_blank" rel="noopener">
+            <div class="news-card-head">
+              <span class="news-source" title="${host}">${escapeHtml(host)}</span>
+              <span class="news-points">▲ ${points}</span>
+            </div>
+            <div class="news-title">${title}</div>
+            <div class="news-meta">
+              <span>${dict.newsBy} ${author} · ${timeAgo(ts)}</span>
+              <span class="news-meta-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
+            </div>
+          </a>
+        `;
+      }).join('');
+      const u = document.getElementById('newsUpdated');
+      if (u) u.textContent = '· ' + timeAgo(Date.now() / 1000 - 5);
+    }
+
+    let newsLoaded = false;
+    let lastRendered = { tech: null, ai: null, research: null };
+
+    async function loadFeed(name, force = false) {
+      currentFeed = name;
+      document.querySelectorAll('.news-tab').forEach(t =>
+        t.classList.toggle('active', t.dataset.feed === name));
+
+      const cacheKey = 'newsfeed:' + name;
+      if (!force) {
+        try {
+          const cached = JSON.parse(sessionStorage.getItem(cacheKey) || 'null');
+          if (cached && (Date.now() - cached.at) < NEWS_TTL_MS) {
+            lastRendered[name] = cached.hits;
+            renderHits(cached.hits);
+            return;
+          }
+        } catch {}
+      }
+
+      if (!lastRendered[name]) renderSkeleton();
+      const refreshBtn = document.getElementById('newsRefresh');
+      refreshBtn.classList.add('spinning');
+
+      try {
+        const ctrl = new AbortController();
+        const timeout = setTimeout(() => ctrl.abort(), 8000);
+        const r = await fetch(NEWS_FEEDS[name], { signal: ctrl.signal });
+        clearTimeout(timeout);
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const json = await r.json();
+        const hits = (json.hits || []).filter(h => h.title || h.story_title);
+        lastRendered[name] = hits;
+        sessionStorage.setItem(cacheKey, JSON.stringify({ at: Date.now(), hits }));
+        if (currentFeed === name) renderHits(hits);
+      } catch (e) {
+        if (currentFeed === name) renderEmpty(() => loadFeed(name, true));
+      } finally {
+        refreshBtn.classList.remove('spinning');
+      }
+    }
+
+    function initNews() {
+      if (newsLoaded) return;
+      newsLoaded = true;
+      document.querySelectorAll('.news-tab').forEach(t =>
+        t.addEventListener('click', () => loadFeed(t.dataset.feed)));
+      document.getElementById('newsRefresh').addEventListener('click', () =>
+        loadFeed(currentFeed, true));
+      loadFeed('tech');
+    }
+
+    // Lazy init when news section enters viewport
+    const newsSection = document.getElementById('news');
+    if (newsSection) {
+      const newsObs = new IntersectionObserver((entries, ob) => {
+        entries.forEach(e => { if (e.isIntersecting) { initNews(); ob.disconnect(); } });
+      }, { rootMargin: '200px' });
+      newsObs.observe(newsSection);
+    }
+
+    // Re-render on language change so date strings translate
+    const _origApplyLang = applyLang;
+    applyLang = function(l) {
+      _origApplyLang(l);
+      if (newsLoaded && lastRendered[currentFeed]) renderHits(lastRendered[currentFeed]);
+    };
 
     /* ══════════════════════════════════════════════════════════════
        INIT NON-INSTANT BITS
