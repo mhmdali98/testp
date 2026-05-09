@@ -1708,6 +1708,7 @@
     ══════════════════════════════════════════════════════════════ */
     let lang  = localStorage.getItem('cv-lang')  || 'en';
     let theme = localStorage.getItem('cv-theme') || 'dark';
+    let typeTimeout = null;
 
     /* ══════════════════════════════════════════════════════════════
        THEME
@@ -1770,9 +1771,19 @@
     /* ══════════════════════════════════════════════════════════════
        LOADER
     ══════════════════════════════════════════════════════════════ */
-    window.addEventListener('load', () => {
-      setTimeout(() => document.getElementById('loader').classList.add('gone'), 350);
-    });
+    function hideLoader() {
+      const l = document.getElementById('loader');
+      if (l) l.classList.add('gone');
+    }
+    if (document.readyState === 'complete') {
+      hideLoader();
+    } else {
+      window.addEventListener('load', () => setTimeout(hideLoader, 250));
+      // Safety net — never let the loader linger past 3s
+      setTimeout(hideLoader, 3000);
+    }
+    // Also bail out if any later JS error happens
+    window.addEventListener('error', hideLoader);
 
     /* ══════════════════════════════════════════════════════════════
        SCROLL PROGRESS + NAV STATE
@@ -1849,7 +1860,6 @@
     /* ══════════════════════════════════════════════════════════════
        TYPEWRITER
     ══════════════════════════════════════════════════════════════ */
-    let typeTimeout = null;
     function restartTypewriter() {
       if (typeTimeout) clearTimeout(typeTimeout);
       const el = document.getElementById('rotatingRole');
