@@ -294,24 +294,55 @@
     }
 
     .avatar {
-      width: 88px; height: 88px;
+      width: 100px; height: 100px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #1565c0, var(--accent));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.1rem;
-      font-weight: 800;
       margin-bottom: 22px;
-      border: 2px solid rgba(0,229,255,0.45);
+      border: 3px solid rgba(0,229,255,0.55);
       animation: pulseDot 3s ease-in-out infinite;
       position: relative;
       z-index: 1;
-      color: #fff;
+      object-fit: cover;
+      object-position: center 10%;
+      display: block;
+      box-shadow: 0 0 20px rgba(0,229,255,0.2);
     }
     html.light .avatar {
-      border-color: rgba(2,136,209,0.45);
+      border-color: rgba(2,136,209,0.55);
+      box-shadow: 0 0 20px rgba(2,136,209,0.2);
+    }
+
+    /* Download CV button */
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border: none;
+      border-radius: 30px;
+      padding: 10px 24px;
+      font-size: 0.85rem;
       color: #fff;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.28s ease;
+      box-shadow: 0 4px 18px rgba(0,229,255,0.25);
+      margin-top: 16px;
+      position: relative;
+      z-index: 1;
+      letter-spacing: 0.3px;
+    }
+    .btn-download:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(0,229,255,0.4);
+      filter: brightness(1.1);
+    }
+    html.light .btn-download {
+      box-shadow: 0 4px 18px rgba(2,136,209,0.3);
+    }
+    html.light .btn-download:hover {
+      box-shadow: 0 8px 28px rgba(2,136,209,0.4);
     }
 
     .hero-name {
@@ -566,7 +597,7 @@
     <!-- HERO -->
     <section class="hero">
       <div class="hero-card">
-        <div class="avatar">M</div>
+        <img class="avatar" src="photo.jpg" alt="Mohammed Ali Salim">
         <h1 class="hero-name">Mohammed Ali Salim</h1>
         <div class="hero-role" data-i18n="heroRole"></div>
         <div class="contacts">
@@ -575,6 +606,9 @@
           <a class="contact" href="https://github.com/mhmdali98" target="_blank">⌥ github.com/mhmdali98</a>
           <span class="contact">📍 <span data-i18n="location"></span></span>
         </div>
+        <a class="btn-download" href="cv.pdf" download="Mohammed_Ali_Salim_CV.pdf">
+          ⬇ <span data-i18n="downloadCV"></span>
+        </a>
       </div>
     </section>
 
@@ -814,6 +848,7 @@
         portNote:  'Most work is for private company systems and cannot be shared publicly. These are available public demos and live projects:',
         portMore:  'More work — Google Drive',
         footer:    'Thank you for reviewing my CV · Mohammed Ali Salim · Frontend Developer',
+        downloadCV: 'Download CV',
       },
       ar: {
         heroRole:    'مطور واجهات أمامية',
@@ -869,6 +904,7 @@
         portNote:  'معظم الأعمال لأنظمة شركات خاصة ولا يمكن مشاركتها علنًا. فيما يلي العروض التجريبية العامة والمشاريع الحية:',
         portMore:  'مزيد من الأعمال — Google Drive',
         footer:    'شكراً لمراجعة سيرتي الذاتية · محمد علي سالم · مطور واجهات أمامية',
+        downloadCV: 'تحميل السيرة الذاتية',
       }
     };
 
