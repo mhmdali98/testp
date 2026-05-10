@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mohammed Ali Salim — CV</title>
+  <meta name="description" content="Senior Frontend Engineer · Full-Stack Web Developer · AI Engineer. Iraq, Karbala.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90' font-family='Arial,sans-serif' font-weight='800' fill='%231e3a8a'%3EM%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink:        #0f172a;
+      --ink-soft:   #334155;
+      --ink-dim:    #64748b;
+      --accent:     #1e40af;
+      --accent-2:   #2563eb;
+      --rule:       #e2e8f0;
+      --bg:         #ffffff;
+      --tag-bg:     #f1f5f9;
+      --tag-border: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #f5f7fb;
+      color: var(--ink);
+      line-height: 1.55;
+      font-size: 10.5pt;
+      padding: 28px 16px;
+    }
+
+    /* Page (A4) */
+    .page {
+      max-width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      background: var(--bg);
+      padding: 18mm 18mm 16mm;
+      box-shadow: 0 18px 60px rgba(15, 23, 42, 0.12);
+      position: relative;
+    }
+
+    /* Toolbar — only on screen */
+    .toolbar {
+      max-width: 210mm;
+      margin: 0 auto 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .toolbar a, .toolbar button {
+      font: inherit;
+      cursor: pointer;
+      padding: 9px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--rule);
+      background: #fff;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.86rem;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toolbar a:hover, .toolbar button:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+    .toolbar .primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    .toolbar .primary:hover {
+      background: var(--accent-2);
+      border-color: var(--accent-2);
+      color: #fff;
+    }
+    .toolbar svg { width: 14px; height: 14px; }
+
+    /* Header */
+    .header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--ink);
+      margin-bottom: 18px;
+    }
+    .name {
+      font-size: 26pt;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.05;
+      margin-bottom: 4px;
+    }
+    .role {
+      font-size: 11.5pt;
+      color: var(--accent);
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+    .contact {
+      font-size: 9.5pt;
+      color: var(--ink-soft);
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      align-items: flex-end;
+    }
+    .contact a { color: inherit; text-decoration: none; }
+    .contact a:hover { color: var(--accent); }
+    .contact-row { display: flex; align-items: center; gap: 6px; }
+    .contact-row svg { width: 12px; height: 12px; color: var(--ink-dim); flex-shrink: 0; }
+
+    /* Section */
+    section { margin-bottom: 16px; }
+    .section-title {
+      font-size: 9.5pt;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    /* Summary */
+    .summary {
+      color: var(--ink-soft);
+      font-size: 10.5pt;
+      line-height: 1.7;
+    }
+
+    /* Experience / Education */
+    .item {
+      margin-bottom: 12px;
+      page-break-inside: avoid;
+    }
+    .item:last-child { margin-bottom: 0; }
+    .item-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 2px;
+    }
+    .item-title {
+      font-size: 11pt;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .item-period {
+      font-size: 9pt;
+      font-weight: 500;
+      color: var(--ink-dim);
+      font-family: 'JetBrains Mono', monospace;
+      white-space: nowrap;
+    }
+    .item-org {
+      font-size: 10pt;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    .item-meta {
+      font-size: 9pt;
+      color: var(--ink-dim);
+      margin-bottom: 4px;
+    }
+    .item-desc {
+      font-size: 9.8pt;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+
+    /* Skills */
+    .skills-list {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      row-gap: 8px;
+      column-gap: 14px;
+    }
+    .skill-cat {
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: var(--ink);
+      padding-top: 2px;
+    }
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .tag {
+      font-size: 8.8pt;
+      padding: 2px 9px;
+      background: var(--tag-bg);
+      border: 1px solid var(--tag-border);
+      border-radius: 4px;
+      color: var(--ink-soft);
+      white-space: nowrap;
+    }
+    .tag.hi {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Two-column for languages and a couple of mini-blocks */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    /* Languages */
+    .lang-list { display: grid; gap: 6px; }
+    .lang-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10pt;
+    }
+    .lang-row strong { font-weight: 600; color: var(--ink); }
+    .lang-row span { color: var(--ink-dim); }
+
+    /* Projects */
+    .proj-grid { display: grid; gap: 10px; }
+    .proj {
+      page-break-inside: avoid;
+    }
+    .proj-title {
+      font-size: 10.2pt;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .proj-title .proj-link {
+      font-weight: 500;
+      color: var(--accent);
+      font-size: 9pt;
+      margin-inline-start: 6px;
+      text-decoration: none;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .proj-title .proj-link:hover { text-decoration: underline; }
+    .proj-desc {
+      font-size: 9.6pt;
+      color: var(--ink-soft);
+      line-height: 1.55;
+      margin-top: 1px;
+    }
+    .proj-tech {
+      font-size: 8.6pt;
+      color: var(--ink-dim);
+      margin-top: 2px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Footer note */
+    .footnote {
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px solid var(--rule);
+      font-size: 8.8pt;
+      color: var(--ink-dim);
+      text-align: center;
+    }
+
+    /* Print */
+    @page { size: A4; margin: 0; }
+    @media print {
+      body { padding: 0; background: #fff; }
+      .toolbar { display: none; }
+      .page {
+        max-width: none;
+        margin: 0;
+        box-shadow: none;
+        padding: 14mm 14mm 12mm;
+      }
+      a { color: inherit; }
+    }
+
+    /* Mobile */
+    @media (max-width: 600px) {
+      body { padding: 12px 0; font-size: 10pt; }
+      .page { padding: 18px 18px 22px; box-shadow: none; }
+      .header { grid-template-columns: 1fr; }
+      .contact { text-align: left; align-items: flex-start; }
+      .name { font-size: 22pt; }
+      .skills-list { grid-template-columns: 1fr; row-gap: 4px; }
+      .skill-cat { padding-top: 8px; }
+      .two-col { grid-template-columns: 1fr; gap: 14px; }
+      .item-head { flex-direction: column; gap: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Toolbar (screen only) -->
+  <div class="toolbar">
+    <a href="index.html" aria-label="Back to portfolio">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to portfolio
+    </a>
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <a href="Mohammed-Ali-Salim-CV.pdf" download>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Original PDF
+      </a>
+      <button class="primary" onclick="window.print()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Print / Save as PDF
+      </button>
+    </div>
+  </div>
+
+  <article class="page">
+
+    <!-- Header -->
+    <header class="header">
+      <div>
+        <h1 class="name">Mohammed Ali Salim</h1>
+        <div class="role">Senior Frontend Engineer · Full-Stack Developer · AI Engineer</div>
+      </div>
+      <div class="contact">
+        <div class="contact-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Karbala, Iraq
+        </div>
+        <div class="contact-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <a href="mailto:salamali731@gmail.com">salamali731@gmail.com</a>
+        </div>
+        <div class="contact-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <a href="tel:+9647822181094">+964 782 218 1094</a>
+        </div>
+        <div class="contact-row">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45C23.2 24 24 23.23 24 22.28V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+          <a href="https://www.linkedin.com/in/mohammed-ali-almaliky-177568157" target="_blank" rel="noopener">linkedin.com/in/mohammed-ali-almaliky</a>
+        </div>
+        <div class="contact-row">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.5-1.4-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.7 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
+          <a href="https://github.com/mhmdali98" target="_blank" rel="noopener">github.com/mhmdali98</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Profile -->
+    <section>
+      <div class="section-title">Profile</div>
+      <p class="summary">
+        Senior software engineer with 6+ years building production-grade web platforms,
+        large-scale business systems, and AI-powered products across 8 companies in Iraq and Türkiye.
+        Strong frontend expertise in Vue.js, Nuxt.js and TypeScript, paired with full-stack
+        capabilities (Node.js, NestJS, FastAPI, C# / ASP.NET, SQL) and applied AI work covering
+        LLMs, RAG, NLP, computer vision and recommender systems. I design and ship products
+        end-to-end — from pixel-accurate responsive interfaces and design systems to robust APIs,
+        complex government and enterprise platforms, and intelligent features that turn data into
+        useful experiences.
+      </p>
+    </section>
+
+    <!-- Experience -->
+    <section>
+      <div class="section-title">Experience</div>
+
+      <div class="item">
+        <div class="item-head">
+          <div class="item-title">Software Developer</div>
+          <div class="item-period">Jan 2026 — Present</div>
+        </div>
+        <div class="item-org">Dot Tech · Self-employed · Iraq · Hybrid</div>
+        <div class="item-desc">
+          Building corporate web platforms and internal tools end-to-end. Stack: Vue, Nuxt, FastAPI, SQL.
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <div class="item-title">Senior Web Developer</div>
+          <div class="item-period">Oct 2024 — Jan 2026 · 1y 4m</div>
+        </div>
+        <div class="item-org">Shams Telecom · Part-time · Iraq</div>
+        <div class="item-desc">
+          Owned the corporate web presence and shipped Shams AI Customer Support v2 — a RAG +
+          fine-tuned LLM assistant grounded in the company knowledge base, with a Vue/Nuxt
+          frontend and FastAPI backend.
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <div class="item-title">Full-Stack Developer</div>
+          <div class="item-period">Jan 2023 — Mar 2025 · 2y 3m</div>
+        </div>
+        <div class="item-org">Feed App · Full-time · Baghdad, Iraq · On-site</div>
+        <div class="item-desc">
+          Delivered a nationwide e-Ration Card platform with rich admin dashboards, control
+          systems and large-scale data tables. Led the Nuxt/SSR frontend and contributed to
+          backend services and reporting.
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <div class="item-title">Frontend Developer</div>
+          <div class="item-period">May — Oct 2024 · 6m</div>
+        </div>
+        <div class="item-org">Digital Logic · Part-time · Iraq</div>
+        <div class="item-desc">
+          Built and maintained client-facing Vue/Nuxt interfaces, charts and dashboards.
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <div class="item-title">Frontend Developer</div>
+          <div class="item-period">Oct 2022 — Jan 2023 · 4m</div>
+        </div>
+        <div class="item-org">Echo com · Part-time · Remote</div>
+        <div class="item-desc">
+          Implemented data-rich UIs and reusable chart components.
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <div class="item-title">Web Developer</div>
+          <div class="item-period">Jun 2021 — Jan 2022 · 8m</div>
+        </div>
+        <div class="item-org">Mediatriple Internet Services · Freelance · Istanbul, Türkiye</div>
+        <div class="item-desc">
+          Delivered web projects for international clients with control-system dashboards and
+          data visualisations.
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <div class="item-title">Full-Stack Developer</div>
+          <div class="item-period">Jan — Jul 2021 · 7m</div>
+        </div>
+        <div class="item-org">Alkafeel Institute · Full-time · Karbala, Iraq</div>
+        <div class="item-desc">
+          Shipped end-to-end web platforms for the institute, including data dashboards and
+          interactive content.
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="item-head">
+          <div class="item-title">Web Developer</div>
+          <div class="item-period">May 2019 — Jun 2021 · 2y 2m</div>
+        </div>
+        <div class="item-org">Enjaz LLC · Iraq</div>
+        <div class="item-desc">
+          Built and maintained business systems and web applications using ASP.NET, JavaScript
+          and SQL Server.
+        </div>
+      </div>
+    </section>
+
+    <!-- Selected Projects -->
+    <section>
+      <div class="section-title">Selected Projects</div>
+      <div class="proj-grid">
+
+        <div class="proj">
+          <div class="proj-title">
+            E-Ration Card System (Government)
+            <span class="proj-tech">Feb 2023 — Jan 2025</span>
+          </div>
+          <div class="proj-desc">
+            Nationwide electronic ration-card platform with rich admin dashboards, large data
+            tables and responsive interfaces. Built end-to-end with Vue and Nuxt.
+          </div>
+          <div class="proj-tech">Vue.js · Nuxt.js · Dashboards · Responsive Design</div>
+        </div>
+
+        <div class="proj">
+          <div class="proj-title">
+            Shams AI — Customer Support v2
+            <a class="proj-link" href="https://shams-ai.up.railway.app/" target="_blank" rel="noopener">shams-ai.up.railway.app</a>
+          </div>
+          <div class="proj-desc">
+            AI assistant powered by RAG and fine-tuning that answers customer queries naturally
+            using the company's own knowledge base. Conversational Vue/Nuxt frontend, FastAPI backend.
+          </div>
+          <div class="proj-tech">RAG · Fine Tuning · LLM · Vue · Nuxt · FastAPI</div>
+        </div>
+
+        <div class="proj">
+          <div class="proj-title">
+            Smart Expenses with NLP &amp; Voice
+            <a class="proj-link" href="https://smart-nlp-frontend-production.up.railway.app/" target="_blank" rel="noopener">smart-nlp-frontend.up.railway.app</a>
+          </div>
+          <div class="proj-desc">
+            A smart expense tracker that understands free-text and speech input in any order
+            using NLP and speech-to-text, then logs entries with the correct numbers automatically.
+          </div>
+          <div class="proj-tech">NLP · Speech-to-Text · FastAPI · Python · Pandas · Nuxt</div>
+        </div>
+
+        <div class="proj">
+          <div class="proj-title">
+            AI Chatbot — Document RAG
+            <a class="proj-link" href="https://rag-shams-production.up.railway.app/" target="_blank" rel="noopener">rag-shams-production.up.railway.app</a>
+          </div>
+          <div class="proj-desc">
+            Grounded AI support agent that answers strictly from a company's internal documents
+            and knowledge files, never hallucinating outside that scope.
+          </div>
+          <div class="proj-tech">RAG · LLM · FastAPI · Vue.js · Fine Tuning</div>
+        </div>
+
+        <div class="proj">
+          <div class="proj-title">
+            Menu Recommender (ML · KNN)
+            <a class="proj-link" href="https://meunrecommenderfront-production.up.railway.app/" target="_blank" rel="noopener">meunrecommender.up.railway.app</a>
+          </div>
+          <div class="proj-desc">
+            Smart restaurant menu recommender using K-Nearest Neighbors. Adapts to the user,
+            learns preferences and surfaces the best dish recommendations.
+          </div>
+          <div class="proj-tech">Machine Learning · KNN · FastAPI · Python · Nuxt · Vue</div>
+        </div>
+
+        <div class="proj">
+          <div class="proj-title">
+            Touchless Web — Computer Vision
+            <a class="proj-link" href="https://hand-move-img-production.up.railway.app/" target="_blank" rel="noopener">hand-move-img.up.railway.app</a>
+          </div>
+          <div class="proj-desc">
+            No-touch web experience controlled with hand gestures via webcam, using MediaPipe
+            for real-time hand tracking — accessibility-first interaction.
+          </div>
+          <div class="proj-tech">Computer Vision · MediaPipe · Vue.js</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section>
+      <div class="section-title">Skills</div>
+      <div class="skills-list">
+
+        <div class="skill-cat">Frontend</div>
+        <div class="skill-tags">
+          <span class="tag hi">Vue.js</span>
+          <span class="tag hi">Nuxt.js</span>
+          <span class="tag hi">TypeScript</span>
+          <span class="tag hi">JavaScript</span>
+          <span class="tag hi">TailwindCSS</span>
+          <span class="tag">AngularJS</span>
+          <span class="tag">HTML5</span>
+          <span class="tag">CSS3</span>
+          <span class="tag">SCSS</span>
+          <span class="tag">Webpack</span>
+          <span class="tag">Pinia</span>
+          <span class="tag">SSR</span>
+          <span class="tag">Responsive Design</span>
+        </div>
+
+        <div class="skill-cat">Backend</div>
+        <div class="skill-tags">
+          <span class="tag hi">Node.js</span>
+          <span class="tag hi">FastAPI</span>
+          <span class="tag hi">Python</span>
+          <span class="tag hi">C#</span>
+          <span class="tag">NestJS</span>
+          <span class="tag">ASP.NET Core</span>
+          <span class="tag">ASP.NET MVC</span>
+          <span class="tag">PHP</span>
+          <span class="tag">REST APIs</span>
+          <span class="tag">JWT</span>
+          <span class="tag">OOP</span>
+        </div>
+
+        <div class="skill-cat">AI / ML / Data</div>
+        <div class="skill-tags">
+          <span class="tag hi">RAG</span>
+          <span class="tag hi">LLMs</span>
+          <span class="tag hi">NLP</span>
+          <span class="tag hi">Computer Vision</span>
+          <span class="tag hi">Machine Learning</span>
+          <span class="tag hi">Deep Learning</span>
+          <span class="tag">Fine Tuning</span>
+          <span class="tag">PyTorch</span>
+          <span class="tag">Transformers</span>
+          <span class="tag">Hugging Face</span>
+          <span class="tag">BERT</span>
+          <span class="tag">CNN</span>
+          <span class="tag">KNN</span>
+          <span class="tag">OpenCV</span>
+          <span class="tag">MediaPipe</span>
+          <span class="tag">Pandas</span>
+          <span class="tag">Seaborn</span>
+          <span class="tag">n8n</span>
+        </div>
+
+        <div class="skill-cat">Databases</div>
+        <div class="skill-tags">
+          <span class="tag hi">Microsoft SQL Server</span>
+          <span class="tag hi">PostgreSQL</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">Redis</span>
+          <span class="tag">MongoDB</span>
+        </div>
+
+        <div class="skill-cat">Mobile</div>
+        <div class="skill-tags">
+          <span class="tag">Flutter</span>
+          <span class="tag">Ionic</span>
+          <span class="tag">Cross-platform</span>
+        </div>
+
+        <div class="skill-cat">Tools / Design</div>
+        <div class="skill-tags">
+          <span class="tag">Git</span>
+          <span class="tag">GitHub</span>
+          <span class="tag">Docker</span>
+          <span class="tag">CI/CD</span>
+          <span class="tag">Adobe XD</span>
+          <span class="tag">Photoshop</span>
+          <span class="tag">Illustrator</span>
+          <span class="tag">UI/UX Design</span>
+          <span class="tag">Excel + VBA</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Education + Languages -->
+    <div class="two-col">
+      <section>
+        <div class="section-title">Education</div>
+        <div class="item">
+          <div class="item-head">
+            <div class="item-title">M.Sc. Candidate — Computer Engineering (AI)</div>
+            <div class="item-period">In Progress</div>
+          </div>
+          <div class="item-org">Postgraduate Studies</div>
+        </div>
+        <div class="item">
+          <div class="item-head">
+            <div class="item-title">B.Sc. Information Technology</div>
+            <div class="item-period">2019 — 2020</div>
+          </div>
+          <div class="item-org">University of ICT — Business IT</div>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-title">Languages</div>
+        <div class="lang-list">
+          <div class="lang-row"><strong>Arabic</strong><span>Native</span></div>
+          <div class="lang-row"><strong>English</strong><span>Intermediate</span></div>
+          <div class="lang-row"><strong>Persian</strong><span>Conversational</span></div>
+        </div>
+
+        <div class="section-title" style="margin-top: 14px;">Highlights</div>
+        <div class="lang-list">
+          <div class="lang-row"><strong>Years of experience</strong><span>6+</span></div>
+          <div class="lang-row"><strong>Companies</strong><span>8</span></div>
+          <div class="lang-row"><strong>Projects delivered</strong><span>40+</span></div>
+          <div class="lang-row"><strong>Specialties</strong><span>Frontend · AI · Systems</span></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="footnote">
+      Confidential and enterprise projects (NDA) are not listed publicly.
+      Available on request — references and additional case studies provided upon interview.
+    </div>
+
+  </article>
+
+  <script>
+    // Set print page title clean
+    document.title = 'Mohammed Ali Salim — CV';
+  </script>
+</body>
+</html>
