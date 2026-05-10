@@ -680,6 +680,48 @@
       border-color: var(--glass-border-strong);
       color: var(--text);
     }
+    .skill-card .tag.is-hidden { display: none; }
+    .skill-card.expanded .tag.is-hidden {
+      display: inline-block;
+      animation: tagFade 0.32s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .skill-card.expanded .tag.is-hidden:nth-child(8)  { animation-delay: 0.02s; }
+    .skill-card.expanded .tag.is-hidden:nth-child(9)  { animation-delay: 0.05s; }
+    .skill-card.expanded .tag.is-hidden:nth-child(10) { animation-delay: 0.08s; }
+    .skill-card.expanded .tag.is-hidden:nth-child(11) { animation-delay: 0.11s; }
+    .skill-card.expanded .tag.is-hidden:nth-child(12) { animation-delay: 0.14s; }
+    .skill-card.expanded .tag.is-hidden:nth-child(13) { animation-delay: 0.17s; }
+    .skill-card.expanded .tag.is-hidden:nth-child(14) { animation-delay: 0.20s; }
+    .skill-card.expanded .tag.is-hidden:nth-child(n+15) { animation-delay: 0.23s; }
+    @keyframes tagFade {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .skill-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(0,229,255,0.12), rgba(108,92,231,0.10));
+      border: 1px solid var(--glass-border-strong);
+      color: var(--primary);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.3s ease;
+    }
+    .skill-more:hover {
+      background: linear-gradient(135deg, rgba(0,229,255,0.22), rgba(108,92,231,0.18));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(0,229,255,0.25);
+    }
+    .skill-more svg {
+      width: 13px; height: 13px;
+      transition: transform 0.3s ease;
+    }
+    .skill-card.expanded .skill-more svg { transform: rotate(45deg); }
 
     /* ══════════════════════════════════════════════════════════════
        TIMELINE
@@ -2214,6 +2256,8 @@
         tagCrossPlatform: 'Cross-platform', tagMobileFirst: 'Mobile-first',
         tagDataAnalysis: 'Data Analysis', tagDataMining: 'Data Mining',
         tagUiUx: 'UI/UX Design',
+        skillMore: 'more',
+        skillLess: 'Show less',
 
         ebExp: 'Career',
         expTitle: 'Work Experience',
@@ -2335,6 +2379,8 @@
         tagCrossPlatform: 'متعدد المنصّات', tagMobileFirst: 'يبدأ من الموبايل',
         tagDataAnalysis: 'تحليل البيانات', tagDataMining: 'استخراج البيانات',
         tagUiUx: 'تصميم UI/UX',
+        skillMore: 'المزيد',
+        skillLess: 'إخفاء',
 
         ebExp: 'المسيرة المهنية',
         expTitle: 'الخبرة العملية',
@@ -2473,6 +2519,62 @@
     document.getElementById('drawerClose').addEventListener('click', () => drawer.classList.remove('open'));
     document.querySelectorAll('[data-drawer-link]').forEach(a =>
       a.addEventListener('click', () => drawer.classList.remove('open')));
+
+    /* ══════════════════════════════════════════════════════════════
+       SKILL CARD COLLAPSE (show first 7, expand rest on click)
+    ══════════════════════════════════════════════════════════════ */
+    const SKILL_LIMIT = 7;
+    function setupSkillCollapse() {
+      document.querySelectorAll('.skill-card .skill-tags').forEach(group => {
+        if (group.dataset.collapseInit) return;
+        const tags = Array.from(group.querySelectorAll('.tag'));
+        if (tags.length <= SKILL_LIMIT) return;
+        const hidden = tags.length - SKILL_LIMIT;
+        tags.forEach((t, i) => { if (i >= SKILL_LIMIT) t.classList.add('is-hidden'); });
+        const card = group.closest('.skill-card');
+        const btn = document.createElement('button');
+        btn.className = 'skill-more';
+        btn.type = 'button';
+        btn.dataset.hidden = hidden;
+        btn.setAttribute('aria-expanded', 'false');
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span class="skill-more-text"></span>
+        `;
+        btn.addEventListener('click', (ev) => {
+          ev.preventDefault();
+          ev.stopPropagation();
+          const open = card.classList.toggle('expanded');
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+          updateSkillMoreButtons();
+        });
+        group.appendChild(btn);
+        group.dataset.collapseInit = '1';
+      });
+      updateSkillMoreButtons();
+    }
+
+    function updateSkillMoreButtons() {
+      const dict = I18N[lang];
+      document.querySelectorAll('.skill-more').forEach(btn => {
+        const card = btn.closest('.skill-card');
+        const open = card && card.classList.contains('expanded');
+        const txt = btn.querySelector('.skill-more-text');
+        if (!txt) return;
+        txt.textContent = open
+          ? dict.skillLess
+          : '+' + btn.dataset.hidden + ' ' + dict.skillMore;
+      });
+    }
+
+    setupSkillCollapse();
+
+    // Re-render labels when language toggles
+    const _origApplyLang_skills = applyLang;
+    applyLang = function(l) {
+      _origApplyLang_skills(l);
+      updateSkillMoreButtons();
+    };
 
     /* ══════════════════════════════════════════════════════════════
        LOADER
