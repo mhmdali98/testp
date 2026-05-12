@@ -313,6 +313,281 @@
     }
 
     /* ══════════════════════════════════════════════════════════════
+       CHAT PANEL (RAG-style assistant)
+    ══════════════════════════════════════════════════════════════ */
+    .chat-launcher {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--gradient-1);
+      color: #00131a;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.25s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 14px rgba(0,229,255,0.28);
+    }
+    html.light .chat-launcher { color: #fff; }
+    .chat-launcher:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,229,255,0.4); }
+    .chat-launcher svg { width: 13px; height: 13px; }
+
+    .chat-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(5,8,16,0.55);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 200;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    html.light .chat-backdrop { background: rgba(255,255,255,0.55); }
+    .chat-backdrop.open { opacity: 1; pointer-events: auto; }
+
+    .chat-panel {
+      position: fixed;
+      z-index: 210;
+      bottom: 20px;
+      inset-inline-end: 20px;
+      width: 380px;
+      max-width: calc(100vw - 40px);
+      height: 580px;
+      max-height: calc(100vh - 40px);
+      background: var(--bg-2);
+      border: 1px solid var(--glass-border-strong);
+      border-radius: 22px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.45), 0 0 28px rgba(0,229,255,0.18);
+      transform: translateY(20px) scale(0.96);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.32s cubic-bezier(0.22,1,0.36,1), transform 0.32s cubic-bezier(0.22,1,0.36,1);
+    }
+    html.light .chat-panel { background: #fafbff; }
+    .chat-panel.open { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
+
+    .chat-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--glass-border);
+      background: linear-gradient(135deg, rgba(0,229,255,0.08), rgba(108,92,231,0.06));
+      flex-shrink: 0;
+    }
+    .chat-header-avatar {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid rgba(0,229,255,0.5);
+      position: relative;
+      flex-shrink: 0;
+    }
+    .chat-header-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+    .chat-header-avatar::after {
+      content: '';
+      position: absolute;
+      bottom: 0; inset-inline-end: 0;
+      width: 10px; height: 10px;
+      background: var(--accent);
+      border: 2px solid var(--bg-2);
+      border-radius: 50%;
+    }
+    html.light .chat-header-avatar::after { border-color: #fafbff; }
+    .chat-header-info { flex: 1; min-width: 0; }
+    .chat-header-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    .chat-header-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      display: flex; align-items: center; gap: 6px;
+      margin-top: 1px;
+    }
+    .chat-header-sub::before {
+      content: '';
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      animation: ledBlink 1.6s ease-in-out infinite;
+    }
+    .chat-close {
+      width: 34px; height: 34px;
+      border-radius: 10px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      display: grid; place-items: center;
+      color: var(--text-soft);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .chat-close:hover { color: var(--primary); border-color: var(--glass-border-strong); }
+    .chat-close svg { width: 16px; height: 16px; }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 16px 16px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      scroll-behavior: smooth;
+    }
+    .chat-messages::-webkit-scrollbar { width: 6px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: var(--glass-border-strong); border-radius: 3px; }
+
+    .msg {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 16px;
+      font-size: 0.88rem;
+      line-height: 1.55;
+      animation: msgIn 0.32s cubic-bezier(0.22,1,0.36,1) both;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    @keyframes msgIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .msg.bot {
+      align-self: flex-start;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      color: var(--text);
+      border-bottom-left-radius: 4px;
+    }
+    html[dir="rtl"] .msg.bot { border-bottom-left-radius: 16px; border-bottom-right-radius: 4px; }
+    .msg.user {
+      align-self: flex-end;
+      background: var(--gradient-1);
+      color: #00131a;
+      border-bottom-right-radius: 4px;
+      font-weight: 500;
+    }
+    html.light .msg.user { color: #fff; }
+    html[dir="rtl"] .msg.user { border-bottom-right-radius: 16px; border-bottom-left-radius: 4px; }
+    .msg b { color: var(--primary); font-weight: 700; }
+    .msg a { color: var(--primary); text-decoration: underline; }
+
+    .typing {
+      align-self: flex-start;
+      padding: 10px 14px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      border-bottom-left-radius: 4px;
+      display: inline-flex;
+      gap: 4px;
+    }
+    .typing span {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--text-soft);
+      animation: typingDot 1.2s ease-in-out infinite;
+    }
+    .typing span:nth-child(2) { animation-delay: 0.15s; }
+    .typing span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes typingDot {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30%           { transform: translateY(-5px); opacity: 1; }
+    }
+
+    .chat-suggestions {
+      display: flex;
+      gap: 6px;
+      padding: 8px 16px 4px;
+      overflow-x: auto;
+      flex-shrink: 0;
+      scrollbar-width: none;
+    }
+    .chat-suggestions::-webkit-scrollbar { display: none; }
+    .chip {
+      flex-shrink: 0;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      color: var(--text-soft);
+      font-size: 0.78rem;
+      font-family: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .chip:hover {
+      color: var(--primary);
+      border-color: var(--glass-border-strong);
+      transform: translateY(-1px);
+    }
+
+    .chat-input-row {
+      display: flex;
+      gap: 8px;
+      padding: 10px 14px 14px;
+      border-top: 1px solid var(--glass-border);
+      background: var(--bg-2);
+      flex-shrink: 0;
+    }
+    html.light .chat-input-row { background: #fafbff; }
+    .chat-input {
+      flex: 1;
+      padding: 11px 14px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: var(--text);
+      font: inherit;
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .chat-input::placeholder { color: var(--text-dim); }
+    .chat-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0,229,255,0.18);
+    }
+    .chat-send {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: var(--gradient-1);
+      color: #00131a;
+      border: none;
+      cursor: pointer;
+      display: grid; place-items: center;
+      transition: transform 0.2s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+      flex-shrink: 0;
+    }
+    html.light .chat-send { color: #fff; }
+    .chat-send:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,229,255,0.35); }
+    .chat-send:disabled { opacity: 0.45; cursor: not-allowed; }
+    .chat-send svg { width: 18px; height: 18px; }
+    html[dir="rtl"] .chat-send svg { transform: scaleX(-1); }
+
+    @media (max-width: 600px) {
+      .chat-panel {
+        bottom: 0; inset-inline-end: 0;
+        inset-inline-start: 0;
+        width: 100%;
+        max-width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        max-height: 100dvh;
+        border-radius: 0;
+      }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
        LOADER
     ══════════════════════════════════════════════════════════════ */
     .loader {
@@ -2437,6 +2712,10 @@
     </button>
     <div class="ai-bot-bubble" id="aiBotBubble" aria-live="polite">
       <span id="aiBotText"></span>
+      <button class="chat-launcher" id="chatLauncher" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        <span data-i18n="chatAsk"></span>
+      </button>
     </div>
     <button class="ai-bot-avatar" id="aiBotAvatar" aria-label="Toggle guide message" type="button">
       <span class="ai-bot-aura" aria-hidden="true"></span>
@@ -2445,6 +2724,29 @@
       <img src="profile.jpg" alt="">
       <span class="ai-bot-badge" aria-hidden="true">AI</span>
     </button>
+  </div>
+
+  <!-- Chat Panel (RAG-style) -->
+  <div class="chat-backdrop" id="chatBackdrop" aria-hidden="true"></div>
+  <div class="chat-panel" id="chatPanel" role="dialog" aria-modal="true" aria-labelledby="chatHeaderName">
+    <div class="chat-header">
+      <div class="chat-header-avatar"><img src="profile.jpg" alt=""></div>
+      <div class="chat-header-info">
+        <div class="chat-header-name" id="chatHeaderName">Mohammed AI</div>
+        <div class="chat-header-sub" data-i18n="chatStatus"></div>
+      </div>
+      <button class="chat-close" id="chatClose" aria-label="Close chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-suggestions" id="chatSuggestions"></div>
+    <form class="chat-input-row" id="chatForm" autocomplete="off">
+      <input class="chat-input" id="chatInput" type="text" maxlength="200" data-i18n-attr="placeholder|chatPlaceholder">
+      <button class="chat-send" id="chatSend" type="submit" aria-label="Send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </form>
   </div>
 
   <script>
@@ -2575,6 +2877,17 @@
         footer: '© 2026 Mohammed Ali Salim · All rights reserved.',
         footerBuilt: 'Crafted with code, coffee, and curiosity.',
         visitors: 'Visitors',
+        chatAsk: 'Ask me anything',
+        chatStatus: 'Online · Answers from my profile only',
+        chatPlaceholder: 'Ask about my skills, projects, experience…',
+        chatGreeting: "Hi! I'm Mohammed's AI assistant 👋 Ask me anything about his skills, projects, experience or how to reach him. I only answer based on what's on this site.",
+        chatFallback: "I don't have an answer to that on this site. Try asking about my <b>skills</b>, <b>projects</b>, <b>AI work</b>, <b>experience</b>, <b>education</b>, or how to <b>contact</b> me.",
+        chatSugg1: 'What do you do?',
+        chatSugg2: 'Show me AI projects',
+        chatSugg3: 'How can I hire you?',
+        chatSugg4: 'Years of experience?',
+        chatSugg5: 'Frontend skills?',
+        chatSugg6: 'Where are you based?',
       },
       ar: {
         navAbout: 'من أنا', navSkills: 'المهارات', navExperience: 'الخبرة', navPortfolio: 'المشاريع', navNews: 'الأخبار', navContact: 'تواصل',
@@ -2699,6 +3012,17 @@
         footer: '© 2026 محمد علي سالم · جميع الحقوق محفوظة.',
         footerBuilt: 'صُمّم بعناية بالكود والقهوة والفضول.',
         visitors: 'زائر',
+        chatAsk: 'اسألني أي شيء',
+        chatStatus: 'متصل · أجيب فقط من بيانات الملف',
+        chatPlaceholder: 'اسأل عن مهاراتي أو مشاريعي أو خبرتي…',
+        chatGreeting: 'مرحباً! أنا مساعد محمد الذكي 👋 اسألني أي شيء عن مهاراته أو مشاريعه أو خبرته أو كيفية التواصل معه. أُجيب فقط استناداً إلى ما هو موجود في هذا الموقع.',
+        chatFallback: 'ليس لديّ إجابة لذلك في هذا الموقع. جرّب أن تسأل عن <b>المهارات</b> أو <b>المشاريع</b> أو <b>أعمال AI</b> أو <b>الخبرة</b> أو <b>التعليم</b> أو كيفية <b>التواصل</b>.',
+        chatSugg1: 'ماذا تعمل؟',
+        chatSugg2: 'أرني مشاريع AI',
+        chatSugg3: 'كيف أتواصل معك؟',
+        chatSugg4: 'سنوات الخبرة؟',
+        chatSugg5: 'مهارات Frontend؟',
+        chatSugg6: 'أين تقيم؟',
       }
     };
 
@@ -2743,6 +3067,10 @@
       document.querySelectorAll('[data-i18n-html]').forEach(el => {
         const key = el.dataset.i18nHtml;
         if (dict[key] !== undefined) el.innerHTML = dict[key];
+      });
+      document.querySelectorAll('[data-i18n-attr]').forEach(el => {
+        const [attr, key] = (el.dataset.i18nAttr || '').split('|');
+        if (attr && key && dict[key] !== undefined) el.setAttribute(attr, dict[key]);
       });
       document.getElementById('langToggle').textContent = l === 'ar' ? 'EN' : 'ع';
       restartTypewriter();
@@ -3223,6 +3551,382 @@
     }
 
     loadVisitorCount();
+
+    /* ══════════════════════════════════════════════════════════════
+       RAG CHATBOT — answers strictly from the knowledge base below
+    ══════════════════════════════════════════════════════════════ */
+    const KB = [
+      {
+        id: 'who',
+        en: ['who are you', 'who is mohammed', 'introduce yourself', 'tell me about you', 'about you', 'about yourself', 'yourself', 'mohammed ali', 'mohammed salim', 'salim'],
+        ar: ['من انت', 'من أنت', 'عرف نفسك', 'عرفني نفسك', 'محمد علي', 'محمد سالم', 'تعريفك', 'نفسك'],
+        a: {
+          en: "I'm <b>Mohammed Ali Salim</b> — a Senior Frontend Engineer, Full-Stack Developer and AI Engineer based in Karbala, Iraq. I have 6+ years of production experience across 8 companies, shipping web platforms, enterprise systems and AI-powered products.",
+          ar: "أنا <b>محمد علي سالم</b> — مهندس واجهات أمامية متمرّس ومطوّر Full-Stack ومهندس ذكاء اصطناعي، أقيم في كربلاء، العراق. خبرتي ٦+ سنوات إنتاج في ٨ شركات: منصّات ويب وأنظمة مؤسسية ومنتجات AI."
+        }
+      },
+      {
+        id: 'role',
+        en: ['what do you do', 'role', 'position', 'job', 'title', 'profession', 'engineer', 'developer'],
+        ar: ['ماذا', 'تعمل', 'شغلك', 'وظيفتك', 'مهنتك', 'تخصصك', 'دورك'],
+        a: {
+          en: "I work as a <b>Senior Frontend Engineer</b>, <b>Full-Stack Web Developer</b> and <b>AI Engineer</b>. I design and ship products end-to-end — pixel-accurate UIs, robust APIs, and intelligent features powered by LLMs, RAG, NLP and computer vision.",
+          ar: "أعمل <b>مهندس واجهات أمامية متمرّس</b> و<b>مطوّر ويب Full-Stack</b> و<b>مهندس ذكاء اصطناعي</b>. أصمّم وأطلق المنتجات كاملة — واجهات دقيقة و APIs قوية وميزات ذكية مدعومة بـ LLMs و RAG و NLP والرؤية الحاسوبية."
+        }
+      },
+      {
+        id: 'location',
+        en: ['where', 'location', 'live', 'based', 'country', 'city', 'karbala', 'iraq'],
+        ar: ['اين', 'أين', 'وين', 'تسكن', 'تقيم', 'بلد', 'مدينة', 'كربلاء', 'العراق', 'العنوان'],
+        a: {
+          en: "I'm based in <b>Karbala, Iraq</b>. I work on-site, hybrid and fully remote — and I've shipped projects for clients in Iraq and Türkiye.",
+          ar: "أقيم في <b>كربلاء، العراق</b>. أعمل حضورياً وهجين وعن بُعد، وقد أنجزت مشاريع لعملاء في العراق وتركيا."
+        }
+      },
+      {
+        id: 'contact',
+        en: ['contact', 'reach', 'email', 'phone', 'hire', 'message', 'call', 'connect', 'get in touch'],
+        ar: ['تواصل', 'اتصال', 'ايميل', 'بريد', 'هاتف', 'رقم', 'وظيفة', 'توظيف', 'راسلني'],
+        a: {
+          en: "You can reach me by:<br>📧 <a href='mailto:salamali731@gmail.com'>salamali731@gmail.com</a><br>📱 <a href='tel:+9647822181094'>+964 782 218 1094</a><br>💼 <a href='https://www.linkedin.com/in/mohammed-ali-almaliky-177568157' target='_blank'>LinkedIn</a><br>👨‍💻 <a href='https://github.com/mhmdali98' target='_blank'>GitHub</a>",
+          ar: "للتواصل معي:<br>📧 <a href='mailto:salamali731@gmail.com'>salamali731@gmail.com</a><br>📱 <a href='tel:+9647822181094'>+964 782 218 1094</a><br>💼 <a href='https://www.linkedin.com/in/mohammed-ali-almaliky-177568157' target='_blank'>LinkedIn</a><br>👨‍💻 <a href='https://github.com/mhmdali98' target='_blank'>GitHub</a>"
+        }
+      },
+      {
+        id: 'experience_years',
+        en: ['experience', 'years', 'how long', 'how many years', 'seniority'],
+        ar: ['خبرة', 'سنوات', 'كم سنة', 'مدة', 'متى', 'اقدمية'],
+        a: {
+          en: "I have <b>6+ years</b> of production experience as a software engineer, accumulated across <b>8 companies</b> (Iraq and Türkiye) since May 2019. I've delivered 40+ projects in frontend, full-stack and AI/ML.",
+          ar: "لديّ <b>٦+ سنوات</b> خبرة إنتاج كمهندس برمجيات، في <b>٨ شركات</b> (العراق وتركيا) منذ مايو 2019. أنجزت ٤٠+ مشروعاً في الواجهات و Full-Stack و AI/ML."
+        }
+      },
+      {
+        id: 'companies',
+        en: ['companies', 'employers', 'work history', 'where worked', 'past jobs'],
+        ar: ['شركات', 'أين عملت', 'العمل السابق', 'تاريخ العمل', 'وظائف سابقة'],
+        a: {
+          en: "I've worked at 8 companies:<br>• <b>Dot Tech</b> (self-employed, current)<br>• <b>Shams Telecom</b> — Senior Web Dev (1y 4m)<br>• <b>Feed App</b> — Full-Stack, Baghdad (2y 3m)<br>• <b>Digital Logic</b> — Frontend (6m)<br>• <b>Echo com</b> — Frontend (4m)<br>• <b>Mediatriple</b> — Web Dev, Istanbul (8m)<br>• <b>Alkafeel Institute</b> — Full-Stack, Karbala (7m)<br>• <b>Enjaz LLC</b> — Web Dev (2y 2m)",
+          ar: "عملت في ٨ شركات:<br>• <b>Dot Tech</b> (عمل حر، الحالي)<br>• <b>شمس تيليكوم</b> — Senior Web Dev (سنة و٤ أشهر)<br>• <b>Feed App</b> — Full-Stack، بغداد (سنتان و٣ أشهر)<br>• <b>Digital Logic</b> — Frontend (٦ أشهر)<br>• <b>Echo com</b> — Frontend (٤ أشهر)<br>• <b>Mediatriple</b> — Web Dev، إسطنبول (٨ أشهر)<br>• <b>معهد الكفيل</b> — Full-Stack، كربلاء (٧ أشهر)<br>• <b>إنجاز LLC</b> — Web Dev (سنتان وشهران)"
+        }
+      },
+      {
+        id: 'current_job',
+        en: ['current job', 'current role', 'currently working', 'right now working', 'working at', 'latest job', 'present role', 'where do you work now'],
+        ar: ['وظيفتك الحالية', 'العمل الحالي', 'تشتغل وين', 'عملك الآن', 'حالياً تعمل'],
+        a: {
+          en: "Currently I'm a <b>Software Developer at Dot Tech (Self-employed)</b> since January 2026 — hybrid, Iraq. Building web platforms with Vue/Nuxt, FastAPI and SQL.",
+          ar: "حالياً أعمل <b>مطوّر برمجيات في Dot Tech (عمل حر)</b> منذ يناير 2026 — هجين، العراق. أبني منصّات ويب بـ Vue/Nuxt و FastAPI و SQL."
+        }
+      },
+      {
+        id: 'frontend',
+        en: ['frontend', 'front end', 'front-end', 'vue', 'nuxt', 'react', 'typescript', 'tailwind', 'html', 'css', 'angular', 'ui'],
+        ar: ['واجهة', 'واجهات', 'فرونت', 'تايب', 'تايبسكريبت', 'فيو', 'نكست', 'تيلويند', 'انجولر'],
+        a: {
+          en: "Frontend is my strongest area. Stack: <b>Vue.js</b>, <b>Nuxt.js</b>, <b>TypeScript</b>, <b>JavaScript</b>, <b>TailwindCSS</b>, plus AngularJS, HTML5, CSS3, SCSS, Webpack, jQuery, Vuetify, Pinia, SSR and responsive design. I focus on accessibility, performance and pixel-accurate UIs.",
+          ar: "الواجهات الأمامية مجالي الأقوى. الستاك: <b>Vue.js</b> و<b>Nuxt.js</b> و<b>TypeScript</b> و<b>JavaScript</b> و<b>TailwindCSS</b>، إضافة إلى AngularJS و HTML5 و CSS3 و SCSS و Webpack و jQuery و Vuetify و Pinia و SSR وتصميم متجاوب. أهتم بإمكانية الوصول والأداء ودقّة التصاميم."
+        }
+      },
+      {
+        id: 'backend',
+        en: ['backend', 'back end', 'back-end', 'api', 'apis', 'server', 'node', 'fastapi', 'python', 'nestjs', 'asp.net', 'aspnet', 'c#', 'csharp', 'php'],
+        ar: ['خادم', 'خلفي', 'باك', 'باك اند', 'بايثون', 'نود', 'نست', 'فاست'],
+        a: {
+          en: "On the backend: <b>Node.js</b>, <b>FastAPI</b>, <b>Python</b>, <b>C#</b>, plus NestJS, ASP.NET Core / MVC, PHP, REST APIs, JWT auth, OOP and microservices.",
+          ar: "في الخادم الخلفي: <b>Node.js</b> و<b>FastAPI</b> و<b>Python</b> و<b>C#</b>، إضافة إلى NestJS و ASP.NET Core / MVC و PHP و REST APIs و JWT و OOP و microservices."
+        }
+      },
+      {
+        id: 'ai',
+        en: ['ai', 'ml', 'machine learning', 'artificial intelligence', 'deep learning', 'llm', 'rag', 'nlp', 'computer vision', 'cv', 'fine tuning', 'pytorch', 'transformers', 'hugging face', 'bert', 'recommender'],
+        ar: ['ذكاء', 'اصطناعي', 'تعلم', 'الة', 'الآلة', 'عميق', 'نموذج', 'لغوي', 'رؤية', 'حاسوبية', 'ar محادثة', 'rag', 'llm', 'nlp'],
+        a: {
+          en: "AI / ML is a big part of my work. I cover: <b>RAG</b>, <b>LLMs</b>, <b>NLP</b>, <b>Computer Vision</b>, <b>Deep Learning</b>, <b>Fine Tuning</b>, plus PyTorch, Transformers, Hugging Face, BERT, CNN, KNN, OpenCV, MediaPipe, Speech Recognition, Pandas, Seaborn and n8n. I've shipped AI assistants, recommenders and CV-driven UIs.",
+          ar: "الذكاء الاصطناعي جزء كبير من عملي. أتعامل مع: <b>RAG</b> و<b>LLMs</b> و<b>NLP</b> و<b>الرؤية الحاسوبية</b> و<b>التعلم العميق</b> و<b>Fine Tuning</b>، إضافة إلى PyTorch و Transformers و Hugging Face و BERT و CNN و KNN و OpenCV و MediaPipe و Speech Recognition و Pandas و Seaborn و n8n. أنجزت مساعدين ذكيين وأنظمة توصية وواجهات تعتمد الرؤية الحاسوبية."
+        }
+      },
+      {
+        id: 'ai_projects',
+        en: ['ai project', 'ai projects', 'ml project', 'show me ai', 'rag bot', 'chatbot', 'recommender', 'menu recommender', 'shams ai', 'smart expense', 'nlp project', 'cv project', 'touchless'],
+        ar: ['مشاريع ai', 'مشروع ذكاء', 'مشاريع الذكاء', 'شات بوت', 'شمس', 'منيو', 'مصاريف', 'لمس'],
+        a: {
+          en: "Some of my AI work:<br>• <b>Shams AI Customer Support v2</b> — RAG + fine-tuned LLM<br>• <b>AI Chatbot (Document RAG)</b> — answers strictly from internal docs<br>• <b>Smart Expenses with NLP & Voice</b> — free-text + speech to entries<br>• <b>Menu Recommender (ML · KNN)</b> — learns user preferences<br>• <b>Touchless Web</b> — hand gestures via MediaPipe<br>See the Portfolio section for live links.",
+          ar: "بعض أعمالي في الذكاء الاصطناعي:<br>• <b>Shams AI Customer Support v2</b> — RAG + ضبط دقيق<br>• <b>AI Chatbot (Document RAG)</b> — يجيب من ملفات الشركة فقط<br>• <b>Smart Expenses بـ NLP والصوت</b> — نص حر + صوت إلى مدخلات<br>• <b>Menu Recommender (ML · KNN)</b> — يتعلم تفضيلات المستخدم<br>• <b>Touchless Web</b> — إيماءات اليد عبر MediaPipe<br>الروابط الحيّة في قسم المشاريع."
+        }
+      },
+      {
+        id: 'projects',
+        en: ['project', 'projects', 'portfolio', 'work', 'demo', 'demos'],
+        ar: ['مشروع', 'مشاريع', 'أعمال', 'سابقاتك', 'بورتفوليو'],
+        a: {
+          en: "Public projects include the <b>E-Ration Card System</b> (government, Vue/Nuxt + dashboards), <b>Shams AI</b>, <b>Smart Expenses NLP</b>, <b>AI Chatbot RAG</b>, <b>Menu Recommender KNN</b>, <b>Touchless Web (computer vision)</b>, plus corporate sites for Dot Tech, Shams Telecom, Serah Albelad, Fiber Iraq, Gidah, IPS, Logic SMS and more.",
+          ar: "أبرز المشاريع العامة: <b>البطاقة التموينية الإلكترونية</b> (حكومي، Vue/Nuxt + لوحات تحكم)، <b>Shams AI</b>، <b>Smart Expenses NLP</b>، <b>AI Chatbot RAG</b>، <b>Menu Recommender KNN</b>، <b>Touchless Web</b>، إضافة إلى مواقع Dot Tech وشمس تيليكوم وسرة البلد وفايبر العراق وغيرها."
+        }
+      },
+      {
+        id: 'private',
+        en: ['private', 'confidential', 'nda', 'government', 'enterprise', 'classified'],
+        ar: ['خاص', 'سري', 'سرية', 'حكومي', 'مؤسسي', 'مؤسسات'],
+        a: {
+          en: "Beyond the public demos, I've shipped many <b>NDA-protected projects</b> for companies and government bodies — internal platforms, financial systems and ministry-level products. Details available upon interview.",
+          ar: "إلى جانب المشاريع العامة، أنجزت العديد من <b>المشاريع السرّية (NDA)</b> لشركات وجهات حكومية — منصّات داخلية وأنظمة مالية ومنتجات على مستوى الوزارات. التفاصيل تُكشف عند المقابلة."
+        }
+      },
+      {
+        id: 'eration',
+        en: ['ration', 'e-ration', 'eration', 'tamweenia', 'البطاقة', 'card system', 'feed app'],
+        ar: ['تموينية', 'بطاقة', 'feed', 'حكومي'],
+        a: {
+          en: "<b>E-Ration Card System</b> — a nationwide electronic ration-card platform with rich admin dashboards, complex data tables and responsive interfaces. Built end-to-end with Vue and Nuxt over 2 years (Feb 2023 — Jan 2025) at Feed App.",
+          ar: "<b>البطاقة التموينية الإلكترونية</b> — منصّة إلكترونية للبطاقة التموينية على مستوى العراق مع لوحات تحكم متقدّمة وجداول بيانات معقّدة وواجهات متجاوبة. بُنيت كاملة بـ Vue و Nuxt خلال سنتين (فبراير 2023 — يناير 2025) في Feed App."
+        }
+      },
+      {
+        id: 'mobile',
+        en: ['mobile', 'flutter', 'ionic', 'app', 'android', 'ios', 'cross platform', 'cross-platform'],
+        ar: ['موبايل', 'تطبيق', 'فلتر', 'ايونيك', 'هاتف', 'اندرويد', 'ايفون'],
+        a: {
+          en: "For mobile / cross-platform I use <b>Flutter</b> and <b>Ionic</b> with a mobile-first, responsive UI approach.",
+          ar: "للموبايل والتطبيقات الهجينة أستخدم <b>Flutter</b> و<b>Ionic</b> مع منهجية mobile-first وواجهات متجاوبة."
+        }
+      },
+      {
+        id: 'databases',
+        en: ['database', 'databases', 'db', 'sql', 'postgres', 'mysql', 'mongo', 'mongodb', 'redis', 'sql server'],
+        ar: ['قواعد', 'بيانات', 'قاعدة', 'سيكوال', 'بوست', 'مونغو', 'ريديس'],
+        a: {
+          en: "Databases I work with: <b>Microsoft SQL Server</b>, <b>PostgreSQL</b>, MySQL, Redis and MongoDB — plus data analysis and data mining.",
+          ar: "قواعد البيانات: <b>Microsoft SQL Server</b> و<b>PostgreSQL</b> و MySQL و Redis و MongoDB، إضافة إلى تحليل واستخراج البيانات."
+        }
+      },
+      {
+        id: 'tools',
+        en: ['tools', 'git', 'github', 'docker', 'cicd', 'ci/cd', 'devops', 'design', 'photoshop', 'illustrator', 'adobe', 'xd', 'figma'],
+        ar: ['ادوات', 'تصميم', 'فوتوشوب', 'دوكر', 'ديف اوبس'],
+        a: {
+          en: "Tools and DevOps: <b>Git</b>, <b>GitHub</b>, Docker, CI/CD, Command Prompt. Design tools: Adobe XD, Photoshop, Illustrator, plus Excel + VBA.",
+          ar: "الأدوات و DevOps: <b>Git</b> و<b>GitHub</b> و Docker و CI/CD و Command Prompt. أدوات التصميم: Adobe XD و Photoshop و Illustrator، إضافة إلى Excel + VBA."
+        }
+      },
+      {
+        id: 'skills_overview',
+        en: ['skill', 'skills', 'stack', 'tech stack', 'technologies', 'tooling', 'what can you do'],
+        ar: ['مهارة', 'مهارات', 'تقنيات', 'ستاك', 'الستاك', 'ماذا تعرف'],
+        a: {
+          en: "I work across 50+ technologies grouped into: <b>Frontend</b> (Vue/Nuxt/TS/Tailwind), <b>Backend</b> (Node/FastAPI/Python/C#), <b>AI · ML · Data</b> (RAG/LLM/NLP/CV/PyTorch), <b>Mobile</b> (Flutter/Ionic), <b>Databases</b> (SQL Server/PostgreSQL), and <b>Tools/DevOps</b> (Git/Docker/CI). See the Skills section for the full breakdown.",
+          ar: "أعمل بـ ٥٠+ تقنية موزّعة على: <b>الواجهات</b> (Vue/Nuxt/TS/Tailwind)، <b>الخادم</b> (Node/FastAPI/Python/C#)، <b>AI · ML · بيانات</b> (RAG/LLM/NLP/CV/PyTorch)، <b>الموبايل</b> (Flutter/Ionic)، <b>قواعد البيانات</b> (SQL Server/PostgreSQL)، و<b>الأدوات/DevOps</b> (Git/Docker/CI). التفاصيل في قسم المهارات."
+        }
+      },
+      {
+        id: 'education',
+        en: ['education', 'degree', 'university', 'school', 'master', 'masters', 'msc', 'bsc', 'bachelor', 'study', 'studied'],
+        ar: ['تعليم', 'دراسة', 'جامعة', 'شهادة', 'بكالوريوس', 'ماجستير', 'دراساتك'],
+        a: {
+          en: "<b>M.Sc. Candidate in Computer Engineering (AI)</b> — currently in progress.<br><b>B.Sc. in Information Technology</b> — University of ICT, Business IT track (2019 – 2020).",
+          ar: "<b>طالب ماجستير هندسة الحاسوب (الذكاء الاصطناعي)</b> — قيد الدراسة.<br><b>بكالوريوس تقنية المعلومات</b> — جامعة تقنية المعلومات والاتصالات، تقنية معلومات الأعمال (2019 – 2020)."
+        }
+      },
+      {
+        id: 'languages',
+        en: ['languages', 'speak', 'arabic', 'english', 'persian', 'farsi', 'language'],
+        ar: ['لغات', 'تتكلم', 'تتحدث', 'عربي', 'انجليزي', 'فارسي'],
+        a: {
+          en: "I speak <b>Arabic</b> (native), <b>English</b> (intermediate) and <b>Persian</b> (conversational).",
+          ar: "أتحدث <b>العربية</b> (اللغة الأم) و<b>الإنجليزية</b> (متوسط) و<b>الفارسية</b> (محادثة)."
+        }
+      },
+      {
+        id: 'availability',
+        en: ['available', 'hire', 'hire you', 'hire me', 'hiring', 'open to', 'opportunity', 'opportunities', 'looking for', 'freelance', 'remote work', 'job offer'],
+        ar: ['متاح', 'متفرغ', 'وظيفة', 'فرص', 'فرصة', 'حر', 'فري لانس', 'عن بعد', 'توظيف'],
+        a: {
+          en: "Yes — I'm <b>open to new opportunities</b>: remote roles, freelance projects and collaborations across frontend, full-stack and AI. Feel free to reach out via email or LinkedIn.",
+          ar: "نعم — أنا <b>مفتوح للفرص الجديدة</b>: وظائف عن بُعد ومشاريع مستقلة وتعاونات في الواجهات و Full-Stack و AI. يمكنك التواصل عبر البريد أو LinkedIn."
+        }
+      },
+      {
+        id: 'why_hire',
+        en: ['why hire', 'why you', 'strength', 'strengths', 'best at', 'specialty'],
+        ar: ['لماذا', 'تميز', 'تخصصك', 'افضل ما', 'قوة'],
+        a: {
+          en: "I deliver products end-to-end — beautiful, fast, accessible frontends paired with reliable backends and intelligent AI features. I've shipped at scale (government ration card, telecom, AI assistants), I write clean and maintainable code, and I collaborate well across design and engineering.",
+          ar: "أنجز المنتجات كاملة — واجهات جميلة وسريعة ويسهل الوصول إليها مع خادم موثوق وميزات ذكية. شحنت أنظمة على نطاق واسع (بطاقة تموينية حكومية، اتصالات، مساعدين ذكيين)، أكتب كوداً نظيفاً قابلاً للصيانة، وأتعاون جيداً بين التصميم والهندسة."
+        }
+      },
+      {
+        id: 'cv',
+        en: ['cv', 'resume', 'pdf', 'download cv', 'curriculum'],
+        ar: ['سيرة', 'cv', 'تحميل', 'pdf'],
+        a: {
+          en: "You can view my full CV at <a href='cv.html'>cv.html</a> — it includes a Print / Save-as-PDF button.",
+          ar: "يمكنك عرض سيرتي الذاتية الكاملة من <a href='cv.html'>cv.html</a> — تحتوي زر طباعة / حفظ PDF."
+        }
+      },
+      {
+        id: 'social',
+        en: ['github', 'linkedin', 'social', 'profile', 'account'],
+        ar: ['غيت', 'جيت', 'لنكدان', 'لنكد', 'لينكد'],
+        a: {
+          en: "Find me on:<br>• <a href='https://github.com/mhmdali98' target='_blank'>GitHub: mhmdali98</a><br>• <a href='https://www.linkedin.com/in/mohammed-ali-almaliky-177568157' target='_blank'>LinkedIn</a>",
+          ar: "تجدني على:<br>• <a href='https://github.com/mhmdali98' target='_blank'>GitHub: mhmdali98</a><br>• <a href='https://www.linkedin.com/in/mohammed-ali-almaliky-177568157' target='_blank'>LinkedIn</a>"
+        }
+      },
+      {
+        id: 'greeting',
+        en: ['hi', 'hello', 'hey', 'yo', 'howdy', 'greetings', 'good morning', 'good evening', 'good afternoon'],
+        ar: ['مرحبا', 'مرحباً', 'السلام', 'هلا', 'اهلا', 'أهلاً', 'صباح', 'مساء'],
+        a: {
+          en: "Hey there 👋 What would you like to know about Mohammed? You can ask about his skills, projects, experience or how to reach him.",
+          ar: "أهلاً بك 👋 ماذا تودّ أن تعرف عن محمد؟ يمكنك السؤال عن المهارات أو المشاريع أو الخبرة أو كيفية التواصل."
+        }
+      },
+      {
+        id: 'thanks',
+        en: ['thanks', 'thank you', 'thx', 'appreciate'],
+        ar: ['شكرا', 'شكراً', 'مشكور', 'ممنون'],
+        a: {
+          en: "You're welcome! Anything else you'd like to know?",
+          ar: "العفو! هل تودّ أن تعرف شيئاً آخر؟"
+        }
+      }
+    ];
+
+    function normalize(s) {
+      return (s || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')  // strip Latin accents
+        .replace(/[ً-ْ]/g, '')  // strip Arabic diacritics
+        .replace(/[إأآا]/g, 'ا')
+        .replace(/ى/g, 'ي')
+        .replace(/ة/g, 'ه')
+        .replace(/[^\p{L}\p{N}\s]/gu, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function ragSearch(query) {
+      const q = normalize(query);
+      if (!q) return null;
+      const qTokens = q.split(' ').filter(t => t.length > 1);
+      let best = null, bestScore = 0;
+      for (const entry of KB) {
+        const kws = [].concat(entry.en || [], entry.ar || []).map(normalize);
+        let s = 0;
+        for (const kw of kws) {
+          if (!kw || kw.length < 3) continue;
+          if (q.includes(kw)) {
+            const words = kw.split(' ').length;
+            s += 3 + (words - 1) * 4 + kw.length * 0.05;  // reward multi-word phrase matches
+          }
+        }
+        for (const tok of qTokens) {
+          for (const kw of kws) {
+            if (kw === tok) { s += 3; break; }                                    // exact token
+            if (kw.length >= 5 && tok.length >= 4 &&
+                (kw.includes(tok) || tok.includes(kw))) { s += 1; break; }        // strict substring
+          }
+        }
+        if (s > bestScore) { bestScore = s; best = entry; }
+      }
+      return bestScore >= 3 ? best : null;
+    }
+
+    function ragAnswer(query) {
+      const hit = ragSearch(query);
+      if (hit) return hit.a[lang] || hit.a.en;
+      return I18N[lang].chatFallback;
+    }
+
+    /* ---------- Chat UI ---------- */
+    const chatPanel    = document.getElementById('chatPanel');
+    const chatBackdrop = document.getElementById('chatBackdrop');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatSuggs    = document.getElementById('chatSuggestions');
+    const chatForm     = document.getElementById('chatForm');
+    const chatInput    = document.getElementById('chatInput');
+    const chatCloseBtn = document.getElementById('chatClose');
+    const chatLaunch   = document.getElementById('chatLauncher');
+
+    let chatOpened = false;
+
+    function appendMsg(text, who) {
+      const el = document.createElement('div');
+      el.className = 'msg ' + who;
+      el.innerHTML = text;
+      chatMessages.appendChild(el);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      return el;
+    }
+
+    function showTyping() {
+      const el = document.createElement('div');
+      el.className = 'typing';
+      el.innerHTML = '<span></span><span></span><span></span>';
+      chatMessages.appendChild(el);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      return el;
+    }
+
+    function renderSuggestions() {
+      const dict = I18N[lang];
+      const items = ['chatSugg1','chatSugg2','chatSugg3','chatSugg4','chatSugg5','chatSugg6'];
+      chatSuggs.innerHTML = '';
+      items.forEach(k => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'chip';
+        b.textContent = dict[k];
+        b.addEventListener('click', () => sendChat(dict[k]));
+        chatSuggs.appendChild(b);
+      });
+    }
+
+    function openChat() {
+      if (!chatPanel) return;
+      chatPanel.classList.add('open');
+      chatBackdrop.classList.add('open');
+      if (!chatOpened) {
+        chatOpened = true;
+        appendMsg(I18N[lang].chatGreeting, 'bot');
+        renderSuggestions();
+      }
+      setTimeout(() => chatInput.focus(), 320);
+    }
+
+    function closeChat() {
+      chatPanel.classList.remove('open');
+      chatBackdrop.classList.remove('open');
+    }
+
+    function sendChat(text) {
+      const q = (text || chatInput.value).trim();
+      if (!q) return;
+      chatInput.value = '';
+      appendMsg(q.replace(/</g, '&lt;'), 'user');
+      const typing = showTyping();
+      const delay = 350 + Math.min(q.length * 12, 700);
+      setTimeout(() => {
+        typing.remove();
+        appendMsg(ragAnswer(q), 'bot');
+      }, delay);
+    }
+
+    chatLaunch    && chatLaunch.addEventListener('click', openChat);
+    chatCloseBtn  && chatCloseBtn.addEventListener('click', closeChat);
+    chatBackdrop  && chatBackdrop.addEventListener('click', closeChat);
+    chatForm      && chatForm.addEventListener('submit', (e) => { e.preventDefault(); sendChat(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && chatPanel.classList.contains('open')) closeChat();
+    });
+
+    // Re-render suggestions on language switch (keep conversation intact)
+    const _origApplyLang_chat = applyLang;
+    applyLang = function(l) {
+      _origApplyLang_chat(l);
+      if (chatOpened) renderSuggestions();
+    };
 
     /* ══════════════════════════════════════════════════════════════
        AI GUIDE BOT — appears when scrolling, narrates each section
