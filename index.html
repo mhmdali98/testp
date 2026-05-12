@@ -135,6 +135,184 @@
     @media (hover: none) { .cursor-glow { display: none; } }
 
     /* ══════════════════════════════════════════════════════════════
+       AI GUIDE BOT
+    ══════════════════════════════════════════════════════════════ */
+    .ai-bot {
+      position: fixed;
+      bottom: 24px;
+      inset-inline-end: 24px;
+      z-index: 95;
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(20px) scale(0.92);
+      transition: opacity 0.45s cubic-bezier(0.22,1,0.36,1), transform 0.45s cubic-bezier(0.22,1,0.36,1);
+    }
+    .ai-bot.is-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    .ai-bot.is-dismissed { display: none !important; }
+
+    .ai-bot-bubble {
+      pointer-events: auto;
+      background: var(--glass-strong);
+      border: 1px solid var(--glass-border-strong);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 18px 18px 4px 18px;
+      padding: 12px 16px;
+      max-width: 240px;
+      font-size: 0.86rem;
+      line-height: 1.45;
+      color: var(--text);
+      position: relative;
+      box-shadow: var(--shadow-md), 0 0 24px rgba(0,229,255,0.15);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    html[dir="rtl"] .ai-bot-bubble {
+      border-radius: 18px 18px 18px 4px;
+    }
+    .ai-bot.hide-bubble .ai-bot-bubble {
+      opacity: 0;
+      transform: translateX(20px) scale(0.9);
+      pointer-events: none;
+    }
+    html[dir="rtl"] .ai-bot.hide-bubble .ai-bot-bubble {
+      transform: translateX(-20px) scale(0.9);
+    }
+    .ai-bot.wiggle .ai-bot-bubble { animation: bubblePop 0.55s cubic-bezier(0.22,1,0.36,1) both; }
+    @keyframes bubblePop {
+      0%   { opacity: 0; transform: translateY(8px) scale(0.85); }
+      55%  { transform: translateY(-2px) scale(1.05); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .ai-bot-avatar {
+      pointer-events: auto;
+      position: relative;
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      flex-shrink: 0;
+      padding: 0;
+      animation: botFloat 3.6s ease-in-out infinite;
+    }
+    .ai-bot-avatar img {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center top;
+      border: 2px solid rgba(0,229,255,0.55);
+      display: block;
+    }
+    .ai-bot-aura {
+      position: absolute; inset: -5px;
+      border-radius: 50%;
+      background: conic-gradient(from var(--ang, 0deg), var(--primary), var(--primary-2), var(--primary-3), var(--primary));
+      filter: blur(7px);
+      opacity: 0.55;
+      animation: spinAngle 5s linear infinite;
+      z-index: -1;
+    }
+    .ai-bot-antenna {
+      position: absolute;
+      top: -12px; left: 50%;
+      width: 2px; height: 14px;
+      background: linear-gradient(to bottom, var(--primary), transparent);
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+    .ai-bot-led {
+      position: absolute;
+      top: -18px; left: 50%;
+      transform: translate(-50%, 0);
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
+      animation: ledBlink 1.6s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes ledBlink {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,255,163,0.6), 0 0 10px var(--accent); }
+      50%      { opacity: 0.5; box-shadow: 0 0 0 8px rgba(0,255,163,0), 0 0 14px var(--accent); }
+    }
+    .ai-bot-badge {
+      position: absolute;
+      bottom: -2px;
+      inset-inline-end: -4px;
+      background: var(--gradient-1);
+      color: #00131a;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.55rem;
+      font-weight: 800;
+      padding: 2px 5px;
+      border-radius: 6px;
+      border: 2px solid var(--bg-1);
+      letter-spacing: 0.5px;
+      pointer-events: none;
+    }
+    html.light .ai-bot-badge { color: #fff; border-color: var(--bg-1); }
+    @keyframes botFloat {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50%      { transform: translateY(-7px) rotate(2deg); }
+    }
+    .ai-bot.wiggle .ai-bot-avatar {
+      animation: botFloat 3.6s ease-in-out infinite, botPoint 0.5s cubic-bezier(0.22,1,0.36,1);
+    }
+    @keyframes botPoint {
+      0%   { transform: rotate(-2deg) scale(1); }
+      40%  { transform: rotate(-12deg) scale(1.08); }
+      100% { transform: rotate(-2deg) scale(1); }
+    }
+
+    .ai-bot-close {
+      pointer-events: auto;
+      position: absolute;
+      top: -6px;
+      inset-inline-end: -6px;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: var(--glass-strong);
+      border: 1px solid var(--glass-border);
+      display: grid;
+      place-items: center;
+      color: var(--text-soft);
+      z-index: 5;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(8px);
+    }
+    .ai-bot-close:hover { color: var(--primary); border-color: var(--glass-border-strong); transform: scale(1.12); }
+    .ai-bot-close svg { width: 11px; height: 11px; }
+
+    /* Active section title gets a brief glow when bot points to it */
+    .section-title.bot-spot {
+      animation: botSpot 1.4s ease;
+    }
+    @keyframes botSpot {
+      0%, 100% { filter: drop-shadow(0 0 0 transparent); }
+      35%      { filter: drop-shadow(0 0 16px rgba(0,229,255,0.6)); }
+    }
+
+    @media (max-width: 600px) {
+      .ai-bot { bottom: 14px; inset-inline-end: 12px; gap: 8px; }
+      .ai-bot-avatar { width: 52px; height: 52px; }
+      .ai-bot-bubble { max-width: 180px; padding: 9px 12px; font-size: 0.78rem; }
+      .ai-bot-badge { font-size: 0.5rem; padding: 1px 4px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ai-bot-avatar, .ai-bot-aura, .ai-bot-led { animation: none !important; }
+      .ai-bot.wiggle .ai-bot-bubble, .ai-bot.wiggle .ai-bot-avatar { animation: none !important; }
+      .section-title.bot-spot { animation: none !important; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
        LOADER
     ══════════════════════════════════════════════════════════════ */
     .loader {
@@ -2252,6 +2430,23 @@
     </div>
   </footer>
 
+  <!-- AI Guide Bot -->
+  <div class="ai-bot" id="aiBot" role="complementary" aria-label="Site guide">
+    <button class="ai-bot-close" id="aiBotClose" aria-label="Hide guide">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="ai-bot-bubble" id="aiBotBubble" aria-live="polite">
+      <span id="aiBotText"></span>
+    </div>
+    <button class="ai-bot-avatar" id="aiBotAvatar" aria-label="Toggle guide message" type="button">
+      <span class="ai-bot-aura" aria-hidden="true"></span>
+      <span class="ai-bot-antenna" aria-hidden="true"></span>
+      <span class="ai-bot-led" aria-hidden="true"></span>
+      <img src="profile.jpg" alt="">
+      <span class="ai-bot-badge" aria-hidden="true">AI</span>
+    </button>
+  </div>
+
   <script>
     /* ══════════════════════════════════════════════════════════════
        I18N
@@ -3028,6 +3223,116 @@
     }
 
     loadVisitorCount();
+
+    /* ══════════════════════════════════════════════════════════════
+       AI GUIDE BOT — appears when scrolling, narrates each section
+    ══════════════════════════════════════════════════════════════ */
+    const BOT_MESSAGES = {
+      en: {
+        about:      "Hi! I'm Mohammed 👋 Get to know me a bit.",
+        skills:     "These are the tools I ship with every day 🛠",
+        experience: "8 companies, 6+ years — here's the journey 💼",
+        portfolio:  "My favourite projects, including AI work ✨",
+        news:       "Live tech news, freshly pulled 📰",
+        contact:    "Liked what you saw? Let's talk! 📩"
+      },
+      ar: {
+        about:      "أهلاً، أنا محمد 👋 تعرّف عليّ هنا.",
+        skills:     "هذه أدواتي التي أبني بها كل يوم 🛠",
+        experience: "٨ شركات و٦+ سنوات — هذه رحلتي 💼",
+        portfolio:  "أبرز مشاريعي، بما فيها أعمال الذكاء الاصطناعي ✨",
+        news:       "أخبار تقنية مباشرة وطازجة 📰",
+        contact:    "أعجبك ما رأيت؟ لنتحدث! 📩"
+      }
+    };
+
+    const botEl       = document.getElementById('aiBot');
+    const botText     = document.getElementById('aiBotText');
+    const botAvatar   = document.getElementById('aiBotAvatar');
+    const botCloseBtn = document.getElementById('aiBotClose');
+    let botDismissed  = sessionStorage.getItem('cv-bot-dismissed') === '1';
+    let botActiveKey  = null;
+    let botBubbleOpen = true;
+    let botShown      = false;
+
+    if (botDismissed && botEl) botEl.classList.add('is-dismissed');
+
+    function setBotMessage(key, opts = {}) {
+      if (botDismissed || !botEl) return;
+      if (!key || !BOT_MESSAGES[lang][key]) return;
+      if (key === botActiveKey && !opts.force) return;
+      botActiveKey = key;
+      botText.textContent = BOT_MESSAGES[lang][key];
+
+      // Restart wiggle animation
+      botEl.classList.remove('wiggle');
+      void botEl.offsetWidth;
+      botEl.classList.add('wiggle');
+
+      // Briefly highlight the section's title to "point" at it
+      const sec = document.getElementById(key);
+      if (sec) {
+        const title = sec.querySelector('.section-title');
+        if (title) {
+          title.classList.remove('bot-spot');
+          void title.offsetWidth;
+          title.classList.add('bot-spot');
+        }
+      }
+    }
+
+    function setBotShown(v) {
+      if (botDismissed || !botEl) return;
+      if (v === botShown) return;
+      botShown = v;
+      botEl.classList.toggle('is-visible', v);
+    }
+
+    botCloseBtn && botCloseBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      botDismissed = true;
+      sessionStorage.setItem('cv-bot-dismissed', '1');
+      botEl.classList.add('is-dismissed');
+    });
+
+    botAvatar && botAvatar.addEventListener('click', () => {
+      botBubbleOpen = !botBubbleOpen;
+      botEl.classList.toggle('hide-bubble', !botBubbleOpen);
+    });
+
+    // Show after scrolling past the hero
+    function onBotScroll() {
+      if (botDismissed) return;
+      const heroBottom = (document.getElementById('home') || {}).offsetHeight || window.innerHeight;
+      setBotShown(window.scrollY > heroBottom * 0.55);
+    }
+    window.addEventListener('scroll', onBotScroll, { passive: true });
+    onBotScroll();
+
+    // Detect the most-visible section to pick the right message
+    const botSectionIds = ['about', 'skills', 'experience', 'portfolio', 'news', 'contact'];
+    const botSecObs = new IntersectionObserver((entries) => {
+      let best = null, bestRatio = 0;
+      entries.forEach(e => {
+        if (e.isIntersecting && e.intersectionRatio > bestRatio) {
+          best = e.target.id;
+          bestRatio = e.intersectionRatio;
+        }
+      });
+      if (best) setBotMessage(best);
+    }, { threshold: [0.05, 0.2, 0.4, 0.6], rootMargin: '-25% 0px -35% 0px' });
+
+    botSectionIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) botSecObs.observe(el);
+    });
+
+    // Re-render bot text on language change
+    const _origApplyLang_bot = applyLang;
+    applyLang = function(l) {
+      _origApplyLang_bot(l);
+      if (botActiveKey) setBotMessage(botActiveKey, { force: true });
+    };
 
     /* ══════════════════════════════════════════════════════════════
        INIT NON-INSTANT BITS
