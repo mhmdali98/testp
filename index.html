@@ -1180,12 +1180,36 @@
        TIMELINE
     ══════════════════════════════════════════════════════════════ */
     .timeline { position: relative; padding-inline-start: 26px; }
+    /* base (dim) rail */
     .timeline::before {
       content: '';
       position: absolute; inset-inline-start: 8px;
       top: 8px; bottom: 8px;
       width: 2px;
-      background: linear-gradient(to bottom, var(--primary), var(--primary-2), transparent);
+      background: var(--glass-border);
+    }
+    /* scrollytelling: gradient fill that grows with scroll progress */
+    .tl-progress {
+      position: absolute; inset-inline-start: 8px;
+      top: 8px;
+      width: 2px;
+      height: 0;
+      transform-origin: top;
+      background: linear-gradient(to bottom, var(--primary), var(--primary-2), var(--primary-3));
+      box-shadow: 0 0 12px rgba(0,229,255,0.5);
+      border-radius: 2px;
+      will-change: height;
+      transition: height 0.12s linear;
+    }
+    .tl-progress::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 50%;
+      transform: translateX(-50%);
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 12px var(--primary), 0 0 22px rgba(0,229,255,0.6);
     }
     .tl-item {
       position: relative;
@@ -1202,19 +1226,35 @@
       background: var(--bg-1);
       border: 2px solid var(--primary);
       box-shadow: 0 0 0 4px rgba(0,229,255,0.12), 0 0 14px rgba(0,229,255,0.4);
+      transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s cubic-bezier(0.22,1,0.36,1);
     }
     .tl-dot::after {
       content: '';
       position: absolute; inset: 4px;
       border-radius: 50%;
       background: var(--gradient-1);
+      transition: background 0.35s ease;
     }
+    /* scrollytelling: only dim/activate when JS marks the timeline .sd-on */
+    .timeline.sd-on .tl-dot {
+      border-color: var(--glass-border-strong);
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.02);
+    }
+    .timeline.sd-on .tl-dot::after { background: var(--glass-border-strong); }
+    .timeline.sd-on .tl-item .tl-card { opacity: 0.66; }
+    .timeline.sd-on .tl-item.tl-active .tl-dot {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(0,229,255,0.12), 0 0 16px rgba(0,229,255,0.5);
+      transform: scale(1.15);
+    }
+    .timeline.sd-on .tl-item.tl-active .tl-dot::after { background: var(--gradient-1); }
+    .timeline.sd-on .tl-item.tl-active .tl-card { opacity: 1; }
     .tl-card {
       background: var(--glass);
       border: 1px solid var(--glass-border);
       border-radius: 16px;
       padding: 18px 22px;
-      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.45s ease;
     }
     .tl-card:hover {
       transform: translateX(6px);
@@ -1855,6 +1895,62 @@
     .reveal-stagger.in > *:nth-child(7) { transition-delay: 0.47s; }
     .reveal-stagger.in > *:nth-child(8) { transition-delay: 0.54s; }
 
+    /* Parallax layers (driven by JS, transform-only so they stay cheap) */
+    .hero-photo, .orb, .photo-tag { will-change: transform; }
+
+    /* ══════════════════════════════════════════════════════════════
+       SCROLL-DRIVEN ANIMATIONS (progressive enhancement)
+       Native CSS scroll timelines on supporting browsers (Chromium).
+       Everything below is additive — the IntersectionObserver reveal
+       remains the universal baseline for Safari / Firefox / older.
+    ══════════════════════════════════════════════════════════════ */
+    @supports (animation-timeline: view()) {
+      @media (prefers-reduced-motion: no-preference) {
+        /* Buttery scroll-linked reveal, tied to the element's view progress */
+        .reveal, .reveal-stagger > * {
+          opacity: 1;                 /* never leave content hidden if JS is off */
+          animation: sdReveal linear both;
+          animation-timeline: view();
+          animation-range: entry 4% cover 26%;
+        }
+        .reveal-stagger > *:nth-child(2) { animation-range: entry 7% cover 30%; }
+        .reveal-stagger > *:nth-child(3) { animation-range: entry 10% cover 33%; }
+        .reveal-stagger > *:nth-child(4) { animation-range: entry 12% cover 35%; }
+        .reveal-stagger > *:nth-child(n+5) { animation-range: entry 15% cover 38%; }
+
+        /* Section titles draw a gradient underline as they scroll in */
+        .section-title { position: relative; }
+        .section-title::after {
+          content: '';
+          position: absolute;
+          inset-inline-start: 0; bottom: -6px;
+          height: 3px; width: 64px;
+          border-radius: 3px;
+          background: var(--gradient-1);
+          transform: scaleX(0);
+          transform-origin: inline-start;
+          animation: sdUnderline linear both;
+          animation-timeline: view();
+          animation-range: entry 10% cover 40%;
+        }
+
+        /* Hero scroll cue + the marquee read as part of the narrative */
+        .cta-card { animation: sdPop linear both; animation-timeline: view(); animation-range: entry 0% cover 45%; }
+      }
+    }
+    @keyframes sdReveal {
+      from { opacity: 0; transform: translateY(34px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes sdUnderline {
+      from { transform: scaleX(0); }
+      to   { transform: scaleX(1); }
+    }
+    @keyframes sdPop {
+      from { opacity: 0; transform: translateY(40px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
     /* ══════════════════════════════════════════════════════════════
        KEYFRAMES
     ══════════════════════════════════════════════════════════════ */
@@ -2324,7 +2420,8 @@
         <p class="section-sub" data-i18n="expSub"></p>
       </div>
       <div class="card reveal" style="padding: 32px 28px;">
-        <div class="timeline">
+        <div class="timeline" id="timeline">
+          <div class="tl-progress" id="tlProgress" aria-hidden="true"></div>
           <div class="tl-item"><div class="tl-dot"></div><div class="tl-card">
             <div class="tl-head"><div class="tl-title" data-i18n="job1Title"></div><div class="tl-period" data-i18n="job1Period"></div></div>
             <div class="tl-company" data-i18n="job1Company"></div>
@@ -3314,6 +3411,68 @@
       });
       stage.addEventListener('mouseleave', () => { stage.style.transform = ''; });
       stage.style.transition = 'transform 0.4s ease';
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       SCROLLYTELLING — career timeline progress + hero parallax
+       JS-driven so it works on every browser (Safari/Firefox/Chrome)
+       and every device. Throttled with requestAnimationFrame.
+    ══════════════════════════════════════════════════════════════ */
+    const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const timelineEl  = document.getElementById('timeline');
+    const tlProgress  = document.getElementById('tlProgress');
+    const tlItems     = timelineEl ? Array.from(timelineEl.querySelectorAll('.tl-item')) : [];
+    const heroSection = document.getElementById('home');
+    const heroPhoto   = document.querySelector('.hero-photo');
+    const heroText    = document.querySelector('.hero-text');
+    const scrollHintEl = document.querySelector('.scroll-hint');
+
+    if (timelineEl && !prefersReduced) timelineEl.classList.add('sd-on');
+
+    let scrollyTicking = false;
+    function scrollyTick() {
+      scrollyTicking = false;
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const smallScreen = window.innerWidth < 768;
+
+      // 1) Timeline: fill the rail to a "reading line" and light passed dots
+      if (timelineEl && tlProgress) {
+        const rect = timelineEl.getBoundingClientRect();
+        const focus = vh * 0.58;
+        const railMax = Math.max(rect.height - 16, 0);   // matches the rail (top:8 → bottom:8)
+        const filled = Math.min(Math.max(focus - rect.top - 8, 0), railMax);
+        tlProgress.style.height = filled + 'px';
+        for (const item of tlItems) {
+          const dot = item.querySelector('.tl-dot');
+          if (!dot) continue;
+          const dTop = dot.getBoundingClientRect().top;
+          item.classList.toggle('tl-active', dTop <= focus);
+        }
+      }
+
+      // 2) Hero parallax depth — transform-only, damped on phones
+      if (heroSection) {
+        const y = window.scrollY || window.pageYOffset || 0;
+        const h = heroSection.offsetHeight || vh;
+        if (y <= h) {
+          const p = h ? y / h : 0;
+          const k = smallScreen ? 0.5 : 1;     // gentler on small screens
+          if (heroPhoto) heroPhoto.style.transform = `translate3d(0, ${y * 0.16 * k}px, 0) scale(${1 - p * 0.05 * k})`;
+          if (heroText)  { heroText.style.transform = `translate3d(0, ${y * -0.05 * k}px, 0)`; heroText.style.opacity = String(Math.max(1 - p * 0.85, 0)); }
+          if (scrollHintEl) scrollHintEl.style.opacity = String(Math.max(1 - p * 3, 0));
+        }
+      }
+    }
+    function requestScrolly() {
+      if (!scrollyTicking) { scrollyTicking = true; requestAnimationFrame(scrollyTick); }
+    }
+    if (!prefersReduced) {
+      window.addEventListener('scroll', requestScrolly, { passive: true });
+      window.addEventListener('resize', requestScrolly, { passive: true });
+      // run after first paint + once fonts/i18n settle so rects are correct
+      requestScrolly();
+      window.addEventListener('load', requestScrolly);
+      setTimeout(requestScrolly, 600);
     }
 
     /* ══════════════════════════════════════════════════════════════
