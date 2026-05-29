@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mhmdali98.github.io/testp/sitemap.xml
